@@ -1,7 +1,11 @@
 # coding=utf-8
 from django.conf import settings
-from django.core.signals import setting_changed
 from django.utils.module_loading import import_string
+
+try:
+    from django.core.signals import setting_changed
+except ImportError:
+    from django.test.signals import setting_changed
 
 
 class PseudoEvent:
