@@ -13,7 +13,6 @@ htmlcov
 node_modules/
 nohup.out
 pip-log.txt
-src/
 tmp/
 venv/
 virtualenv/
