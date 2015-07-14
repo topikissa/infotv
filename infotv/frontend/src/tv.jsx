@@ -9,7 +9,7 @@ var stagger = require("./stagger");
 var config = require("./config");
 
 function checkTallness() {
-    document.body.classList.toggle("tall", !!(window.innerWidth < window.innerHeight));
+    document.body.classList.toggle("tall", (window.innerWidth < window.innerHeight));
 }
 
 var TVApp = React.createClass({

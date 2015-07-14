@@ -13,8 +13,7 @@ var EditorComponent = React.createClass({
 	},
 
 	slideTypeChanged: function(event) {
-		var type = event.target.value;
-		this.props.currentSlide.type = type;
+		this.props.currentSlide.type = event.target.value;
 		this.props.tv.forceUpdate();
 	},
 

@@ -28,9 +28,9 @@ var MultiImageSlide = React.createClass({
             updateTimer: setInterval(this.tick, 100),
         });
     },
-	componentWillUnmount: function() {
-		clearInterval(this.state.updateTimer || 0);
-	},
+    componentWillUnmount: function() {
+        clearInterval(this.state.updateTimer || 0);
+    },
     tick: function() {
         var deadline;
         if(!this.isMounted()) return;
@@ -55,38 +55,37 @@ var MultiImageSlide = React.createClass({
         var state = _.extend(this.getInitialState(), {deadline: 0});
         this.setState(state);
     },
-	render: function() {
+    render: function() {
         var image = null;
         if(this.state.images.length > 0) {
             var lastIndex = this.state.images.length - 1;
             var effIndex = Math.min(lastIndex, this.state.imageIndex);
             image = this.state.images[effIndex];
         }
-		var style = {};
+        var style = {};
         if(image) style.backgroundImage = "url(" + image.url + ")";
-		return (<div key={this.props.key} className="slide image-slide" style={style} onClick={this.reset} />);
-	}
+        return (<div key={this.props.key} className="slide image-slide" style={style} onClick={this.reset} />);
+    }
 });
 
 
 var MultiImageSlideEditor = React.createClass({
-	setConfig: function(event) {
-        console.log("plep");
-		this.props.slide.config = event.target.value;
-		this.props.tv.forceUpdate();
-	},
-	render: function() {
-		var slide = this.props.slide;
-		return (<div className="multi-image-slide-editor">
+    setConfig: function(event) {
+        this.props.slide.config = event.target.value;
+        this.props.tv.forceUpdate();
+    },
+    render: function() {
+        var slide = this.props.slide;
+        return (<div className="multi-image-slide-editor">
             <textarea value={slide.config || ""} onChange={this.setConfig} placeholder="pituus (msek);HTTP-osoite ..." />
             <br/>
             {parseImages(slide.config).length} kelvollista kuvaa
-		</div>);
-	}
+        </div>);
+    }
 });
 
 
 module.exports = {
-	view: MultiImageSlide,
-	editor: MultiImageSlideEditor
+    view: MultiImageSlide,
+    editor: MultiImageSlideEditor
 };
