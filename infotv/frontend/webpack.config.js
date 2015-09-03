@@ -1,15 +1,17 @@
 var webpack = require('webpack');
 
 var CURRENT_STYLE = process.env.INFOTV_STYLE || "desucon";
+var outputFsPath = process.env.OUTPUT_PATH || (__dirname + "/../static/infotv");
+var outputPublicPath = process.env.PUBLIC_PATH || "/static/infotv";
 
 module.exports = {
     context: __dirname,
     entry: "./src/main.js",
     bail: true,
     output: {
-        path: __dirname + "/../static/infotv",
+        path: outputFsPath,
         filename: "bundle.js",
-        publicPath: "/static/infotv"  // Nb: this may require configuration
+        publicPath: outputPublicPath
     },
     module: {
         loaders: [
