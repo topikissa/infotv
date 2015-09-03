@@ -8,12 +8,12 @@ var modules = {
     "multi-image": require("./multi-image-slide.jsx"),
     "nownext": require("./nownext-slide.jsx"),
     "social": require("./social-slide.jsx"),
-    "anime": require("./anime-slide.jsx")
+    "anime": require("./anime-slide.jsx"),
 };
 
 var viewComponents = {};
 var editorComponents = {};
-_.each(modules, function(mod, key) {
+_.each(modules, function (mod, key) {
     mod = modules[key];
     viewComponents[key] = React.createFactory(mod.view);
     editorComponents[key] = React.createFactory(mod.editor || DummyEditor);

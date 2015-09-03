@@ -8,8 +8,8 @@
     "node": true
   },
   "rules": {
+    "indent": [2, 4],
     "no-return-assign": 0,
-    "no-underscore-dangle": 0,
     "quotes": 0,
     "strict": 0,
     "curly": 0,
