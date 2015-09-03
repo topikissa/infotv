@@ -1,0 +1,41 @@
+.social-slide {
+	margin-right: 2vmax;
+	.item {
+		float: left;
+		width: 15vmax;
+		height: 15vmax;
+		border-radius: 1vmax;
+		padding: 0.25em;
+		margin-right: 1vmax;
+		margin-bottom: 1vmax;
+		text-shadow: 0px 0px 10px rgb(7, 7, 7), 0px 0px 4px rgb(7, 7, 7);
+		background: #000;
+		background-size: cover;
+		background-position: center center;
+		background-repeat: no-repeat;
+		overflow: hidden;
+		.body {
+			font-size: 1.25vmax;
+		}
+		&.has-img .body {
+			opacity: 0.7;
+			font-size: 1vmax;
+		}
+		.meta {
+			padding-bottom: 0.5em;
+			font-size: 0.85vmax;
+		}
+	}
+}
+
+.social-item-enter {
+	animation-name: bounceIn;
+	animation-duration: 5.75s;
+	.animated();
+}
+
+.social-item-leave {
+	animation-name: fadeOut;
+	animation-duration: .05s;
+	.animated();
+}
