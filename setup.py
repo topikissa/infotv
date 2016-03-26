@@ -11,7 +11,7 @@ def requirements(filename):
 
 setup(
     name="infotv",
-    version="0.1.0",
+    version="0.1.1",
     description="A television, with information",
     author="Aarni Koskela",
     author_email="akx@iki.fi",
