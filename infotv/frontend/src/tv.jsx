@@ -134,13 +134,8 @@ var TVApp = React.createClass({
     },
 
     madokaTick: function() {
-        if ((new Date()).getHours() < 1) {
-            if (Math.random() < 0.1) {
-                $('#content').addClass('madoka');
-            } else {
-                $('#content').removeClass('madoka');
-            }
-        }
+        const shouldMadoka = ((new Date()).getHours() < 1 && (Math.random() < 0.1));
+        document.getElementById("content").classList.toggle("madoka", shouldMadoka);
     },
 
     render: function() {
