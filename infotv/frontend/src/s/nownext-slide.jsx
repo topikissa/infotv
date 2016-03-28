@@ -32,8 +32,8 @@ function NowNextSlide(props) {
     _.each(order, (loc) => {
         if (onlyLoc && onlyLoc !== loc) return;
         const programs = _.filter(schedule.programs, (prog) => prog.location === loc);
-        let currentProg = _.detect(programs, (prog) => (nowTs >= prog.start_ts && nowTs < prog.end_ts));
-        let nextProg = _.detect(programs, (prog) => (prog.start_ts >= nowTs));
+        let currentProg = _.find(programs, (prog) => (nowTs >= prog.start_ts && nowTs < prog.end_ts));
+        let nextProg = _.find(programs, (prog) => (prog.start_ts >= nowTs));
         if (!(currentProg || nextProg)) return;
 
         currentProg = (currentProg ? (
