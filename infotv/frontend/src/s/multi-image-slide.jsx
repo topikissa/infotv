@@ -62,7 +62,7 @@ class MultiImageSlide extends React.Component {
     }
 
     reset() {
-        const state = _.extend(this.getInitialState(), { deadline: 0 });
+        const state = { deadline: 0, imageIndex: 0 };
         this.setState(state);
     }
 

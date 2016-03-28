@@ -20,6 +20,7 @@ export default class TVApp extends React.Component {
         this.requestSchedule = this.requestSchedule.bind(this);
         this.requestSocial = this.requestSocial.bind(this);
         this.slideSwitchTick = this.slideSwitchTick.bind(this);
+        this.addNewSlide = this.addNewSlide.bind(this);
 
         this.state = {
             deck: null,
