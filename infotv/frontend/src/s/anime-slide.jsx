@@ -1,9 +1,7 @@
 import React from "react";
 import DatumManager from "../datum";
 
-const AnimeSlide = React.createClass({
-    displayName: "AnimeSlide",
-
+class AnimeSlide extends React.Component {
     render() {
         const anime = `${DatumManager.getValue("anime") || ""}`;
         return (
@@ -11,9 +9,8 @@ const AnimeSlide = React.createClass({
                 <span>{anime}</span>
             </div>
         );
-    },
-});
-
+    }
+}
 
 export default {
     view: AnimeSlide,

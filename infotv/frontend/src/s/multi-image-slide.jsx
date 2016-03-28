@@ -19,27 +19,27 @@ function parseImages(data) {
     }).compact().value();
 }
 
-const MultiImageSlide = React.createClass({
-    propTypes: {
-        slide: propTypes.slide.isRequired,
-    },
+class MultiImageSlide extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.reset = this.reset.bind(this);
+        this.tick = this.tick.bind(this);
 
-    getInitialState() {
-        return {
+        this.state = {
             imageIndex: 0,
-            images: parseImages(this.props.slide.config),
+            images: parseImages(props.slide.config),
         };
-    },
+    }
 
     componentWillMount() {
         this.setState({
             updateTimer: setInterval(this.tick, 100),
         });
-    },
+    }
 
     componentWillUnmount() {
         clearInterval(this.state.updateTimer || 0);
-    },
+    }
 
     tick() {
         let deadline;
@@ -59,12 +59,12 @@ const MultiImageSlide = React.createClass({
                 deadline: null,
             });
         }
-    },
+    }
 
     reset() {
         const state = _.extend(this.getInitialState(), { deadline: 0 });
         this.setState(state);
-    },
+    }
 
     render() {
         let image = null;
@@ -76,20 +76,23 @@ const MultiImageSlide = React.createClass({
         let style = {};
         if (image) style.backgroundImage = `url(${image.url})`;
         return <div key={this.props.key} className="slide image-slide" style={style} onClick={this.reset} />;
-    },
-});
+    }
+}
 
+MultiImageSlide.propTypes = {
+    slide: propTypes.slide.isRequired,
+};
 
-const MultiImageSlideEditor = React.createClass({
-    propTypes: {
-        slide: propTypes.slide.isRequired,
-        tv: propTypes.tv.isRequired,
-    },
+class MultiImageSlideEditor extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.setConfig = this.setConfig.bind(this);
+    }
 
     setConfig(event) {
         this.props.slide.config = event.target.value;
         this.props.tv.forceUpdate();
-    },
+    }
 
     render() {
         const slide = this.props.slide;
@@ -98,8 +101,13 @@ const MultiImageSlideEditor = React.createClass({
             <br />
             {parseImages(slide.config).length} kelvollista kuvaa
             </div>);
-    },
-});
+    }
+}
+
+MultiImageSlideEditor.propTypes = {
+    slide: propTypes.slide.isRequired,
+    tv: propTypes.tv.isRequired,
+};
 
 
 export default {

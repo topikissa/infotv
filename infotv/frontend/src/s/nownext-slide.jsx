@@ -22,7 +22,7 @@ function renderProgram(prog) {
     );
 }
 
-const NowNextSlide = React.createClass({
+class NowNextSlide extends React.Component {
     render() {
         const onlyLoc = config.loc;
         const content = [];
@@ -59,8 +59,8 @@ const NowNextSlide = React.createClass({
                 </table>
             </div>
         );
-    },
-});
+    }
+}
 
 export default {
     view: NowNextSlide,

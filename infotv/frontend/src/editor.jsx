@@ -4,12 +4,17 @@ import _ from "lodash";
 const editorComponents = require("./s").default.editors;
 import propTypes from "./prop-types";
 
-const EditorComponent = React.createClass({
-    propTypes: {
-        deck: propTypes.deck.isRequired,
-        tv: propTypes.tv.isRequired,
-        currentSlide: propTypes.slide.isRequired,
-    },
+export default class EditorComponent extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.confirmAndPublish = this.confirmAndPublish.bind(this);
+        this.eepChanged = this.eepChanged.bind(this);
+        this.moveSlideDown = this.moveSlideDown.bind(this);
+        this.moveSlideUp = this.moveSlideUp.bind(this);
+        this.slideChanged = this.slideChanged.bind(this);
+        this.slideDurationChanged = this.slideDurationChanged.bind(this);
+        this.slideTypeChanged = this.slideTypeChanged.bind(this);
+    }
 
     getSlideEditor(currentSlide) {
         const editorComponentClass = editorComponents[currentSlide.type];
@@ -30,23 +35,23 @@ const EditorComponent = React.createClass({
             </div>
             {editorComponent}
         </div>);
-    },
+    }
 
     eepChanged(event) {
         const eep = event.target.value;
         this.props.deck.eep = (eep && eep.length ? eep : null);
         this.props.tv.forceUpdate();
-    },
+    }
 
     slideChanged(event) {
         const id = event.target.value;
         this.props.tv.viewSlideById(id);
-    },
+    }
 
     slideTypeChanged(event) {
         this.props.currentSlide.type = event.target.value;
         this.props.tv.forceUpdate();
-    },
+    }
 
     moveSlide(slide_, direction) {
         const slides = this.props.deck.slides;
@@ -57,22 +62,22 @@ const EditorComponent = React.createClass({
         if (newIdx < 0) newIdx = 0;
         if (newIdx >= slides.length) newIdx = slides.length;
         slides.splice(newIdx, 0, slide);
-    },
+    }
 
     moveSlideUp() {
         this.moveSlide(this.props.currentSlide, -1);
         this.props.tv.viewSlideById(this.props.currentSlide.id);
-    },
+    }
 
     moveSlideDown() {
         this.moveSlide(this.props.currentSlide, +1);
         this.props.tv.viewSlideById(this.props.currentSlide.id);
-    },
+    }
 
     slideDurationChanged(event) {
         this.props.currentSlide.duration = 0 | event.target.value;
         this.props.tv.forceUpdate();
-    },
+    }
 
     confirmAndPublish() {
         if (this.props.deck.slides.length <= 0) {
@@ -94,7 +99,7 @@ const EditorComponent = React.createClass({
             },
         });
         return true;
-    },
+    }
 
     render() {
         if (!this.props.deck) {
@@ -129,7 +134,12 @@ const EditorComponent = React.createClass({
                 {slideEditor}
             </div>
         </div>);
-    },
-});
+    }
+}
 
-export default EditorComponent;
+EditorComponent.propTypes = {
+    deck: propTypes.deck.isRequired,
+    tv: propTypes.tv.isRequired,
+    currentSlide: propTypes.slide.isRequired,
+};
+

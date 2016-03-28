@@ -12,15 +12,22 @@ function checkTallness() {
     document.body.classList.toggle("tall", (window.innerWidth < window.innerHeight));
 }
 
-const TVApp = React.createClass({
-    getInitialState() {
-        return {
+export default class TVApp extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.madokaTick = this.madokaTick.bind(this);
+        this.requestDeck = this.requestDeck.bind(this);
+        this.requestSchedule = this.requestSchedule.bind(this);
+        this.requestSocial = this.requestSocial.bind(this);
+        this.slideSwitchTick = this.slideSwitchTick.bind(this);
+
+        this.state = {
             deck: null,
             slideIndex: 0,
             ticksUntilNextSlide: 1,
             edit: false,
         };
-    },
+    }
 
     componentWillMount() {
         const self = this;
@@ -36,7 +43,7 @@ const TVApp = React.createClass({
         else document.body.classList.add("show");
         window.addEventListener("resize", _.debounce(checkTallness, 200));
         checkTallness();
-    },
+    }
 
     componentWillUnmount() {
         this.deckUpdater.stop();
@@ -44,7 +51,7 @@ const TVApp = React.createClass({
         this.socialUpdater.stop();
         clearInterval(this.madokaTimer);
         clearInterval(this.slideSwitchTimer);
-    },
+    }
 
     slideSwitchTick() {
         if (this.state.edit) return false;
@@ -54,7 +61,7 @@ const TVApp = React.createClass({
             this.nextSlide();
         }
         return true;
-    },
+    }
 
     nextSlide() {
         let ticksUntilNextSlide = 1;
@@ -70,7 +77,7 @@ const TVApp = React.createClass({
             }
         }
         this.setState({ slideIndex: newSlideIndex, ticksUntilNextSlide });
-    },
+    }
 
     viewSlideById(id) {
         const index = _.findIndex(this.state.deck.slides, (s) => s.id === id);
@@ -78,7 +85,7 @@ const TVApp = React.createClass({
             this.setState({ slideIndex: index });
             console.log("Viewing slide:", index, "id", id);
         }
-    },
+    }
 
     addNewSlide() {
         const slide = { type: "text", duration: 1, id: `s${Date.now().toString(30)}` };
@@ -86,13 +93,13 @@ const TVApp = React.createClass({
         deck.slides.splice(this.state.slideIndex, 0, slide);
         this.setState({ deck });
         this.viewSlideById(slide.id);
-    },
+    }
 
     deleteCurrentSlide() {
         const deck = this.state.deck;
         deck.slides.splice(this.state.slideIndex, 1);
         this.setState({ deck, slideIndex: 0 });
-    },
+    }
 
     requestDeck() {
         const self = this;
@@ -111,7 +118,7 @@ const TVApp = React.createClass({
             },
         });
         return true;
-    },
+    }
 
     requestSchedule() {
         const self = this;
@@ -123,7 +130,7 @@ const TVApp = React.createClass({
                 self.forceUpdate();
             },
         });
-    },
+    }
 
     requestSocial() {
         const self = this;
@@ -134,17 +141,17 @@ const TVApp = React.createClass({
                 self.forceUpdate();
             },
         });
-    },
+    }
 
     madokaTick() {
         const shouldMadoka = ((new Date()).getHours() < 1 && (Math.random() < 0.1));
         document.getElementById("content").classList.toggle("madoka", shouldMadoka);
-    },
+    }
 
     enableEditing() {
         this.setState({ edit: true });
         return true;
-    },
+    }
 
     render() {
         let currentSlide = null;
@@ -166,7 +173,5 @@ const TVApp = React.createClass({
             {eep}
             {editor}
         </div>);
-    },
-});
-
-export default TVApp;
+    }
+}

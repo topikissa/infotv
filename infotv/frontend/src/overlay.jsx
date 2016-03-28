@@ -2,15 +2,15 @@ import React from "react";
 import moment from "moment";
 import DatumManager from "./datum";
 
-const OverlayComponent = React.createClass({
+export default class OverlayComponent extends React.Component {
     componentWillMount() {
         this._clockUpdateTimer = setInterval(() => { this.forceUpdate(); }, 5000);
-    },
+    }
 
     componentWillUnmount() {
         clearInterval(this._clockUpdateTimer);
         this._clockUpdateTimer = null;
-    },
+    }
 
     renderWeather() {
         const weather = DatumManager.getValue("weather");
@@ -33,7 +33,7 @@ const OverlayComponent = React.createClass({
             <span>{temperature ? `${temperature.toLocaleString("fi", { maximumFractionDigits: 1 })}°C` : ""}</span>
             <span>{icon}</span>
         </div>);
-    },
+    }
 
     render() {
         const text = moment().format("HH:mm");
@@ -42,7 +42,5 @@ const OverlayComponent = React.createClass({
             <div className="clock">{text}</div>
             {weather}
         </div>);
-    },
-});
-
-export default OverlayComponent;
+    }
+}

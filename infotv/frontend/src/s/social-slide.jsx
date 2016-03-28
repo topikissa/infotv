@@ -9,26 +9,28 @@ const mediumIcons = {
     tw: "fa fa-twitter",
 };
 
-const SocialSlide = React.createClass({
-    displayName: "SocialSlide",
+class SocialSlide extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.renderElement = this.renderElement.bind(this);
+        this.tick = this.tick.bind(this);
 
-    getInitialState() {
-        return {
+        this.state = {
             frame: 0,
         };
-    },
+    }
 
     componentWillMount() {
         this.setState({ timer: setInterval(this.tick, 600) });
-    },
+    }
 
     componentWillUnmount() {
         clearInterval(this.state.timer);
-    },
+    }
 
     tick() {
         this.setState({ frame: this.state.frame + 1 });
-    },
+    }
 
     renderElement(element) {
         const cn = `${cx({ item: true, "has-img": !!element.primary_image_url })} ${element.medium}`;
@@ -49,7 +51,7 @@ const SocialSlide = React.createClass({
                 <div className="body">{element.message}</div>
             </div>
         );
-    },
+    }
 
     render() {
         const items = DatumManager.getValue("social") || [];
@@ -63,8 +65,10 @@ const SocialSlide = React.createClass({
                 </ReactCSSTransitionGroup>
             </div>
         );
-    },
-});
+    }
+}
+
+SocialSlide.displayName = "SocialSlide";
 
 export default {
     view: SocialSlide,
