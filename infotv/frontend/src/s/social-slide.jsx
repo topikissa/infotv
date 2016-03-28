@@ -1,8 +1,8 @@
-import React from "react/addons";
+import React from "react";
 import DatumManager from "../datum";
 import moment from "moment";
 import cx from "classnames";
-const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
 const mediumIcons = {
     ig: "fa fa-instagram",
@@ -58,7 +58,9 @@ const SocialSlide = React.createClass({
 
         return (
             <div className="slide social-slide">
-                <ReactCSSTransitionGroup transitionName="social-item">{childElements}</ReactCSSTransitionGroup>
+                <ReactCSSTransitionGroup transitionName="social-item" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
+                    {childElements}
+                </ReactCSSTransitionGroup>
             </div>
         );
     },

@@ -1,7 +1,7 @@
-import React, { PropTypes } from "react/addons";
+import React, { PropTypes } from "react";
+import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import propTypes from "./prop-types";
 const slideComponents = require("./s").default.views;
-const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 const SlidesComponent = React.createClass({
     propTypes: {
@@ -23,7 +23,9 @@ const SlidesComponent = React.createClass({
         let slideComponent = this.getSlideComponent(slideData);
         if (this.props.animate) {
             slideComponent = (
-                <ReactCSSTransitionGroup transitionName="slide">{slideComponent}</ReactCSSTransitionGroup>
+                <ReactCSSTransitionGroup transitionName="slide" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
+                    {slideComponent}
+                </ReactCSSTransitionGroup>
             );
         }
         return slideComponent;
