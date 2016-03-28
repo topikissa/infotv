@@ -1,20 +1,20 @@
-var React = require("react/addons");
-var DatumManager = require("../datum");
+import React from "react";
+import DatumManager from "../datum";
 
-var AnimeSlide = React.createClass({
-    displayName: 'AnimeSlide',
+const AnimeSlide = React.createClass({
+    displayName: "AnimeSlide",
 
-    render: function () {
-        var anime = "" + (DatumManager.getValue("anime") || "");
+    render() {
+        const anime = `${DatumManager.getValue("anime") || ""}`;
         return (
             <div className="slide anime-slide">
                 <span>{anime}</span>
             </div>
         );
-    }
+    },
 });
 
 
-module.exports = {
+export default {
     view: AnimeSlide,
 };

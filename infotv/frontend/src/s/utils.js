@@ -1,3 +1,4 @@
-module.exports.isImageURL = function(url) {
+
+export function isImageURL(url) {
     return (/^http.+(jpg|gif|png|svg)$/i).test(url || "");
-};
+}

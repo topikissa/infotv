@@ -1,24 +1,33 @@
-var React = require("react/addons");
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-var slideComponents = require("./s").views;
+import React, { PropTypes } from "react/addons";
+import propTypes from "./prop-types";
+const slideComponents = require("./s").default.views;
+const ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-var SlidesComponent = React.createClass({
-    getSlideComponent: function(slideData) {
-        if(!slideData) return <div/>;
-        var arg = {slide: slideData, key: slideData.id, tv: this.props.tv};
-        var comp = slideComponents[slideData.type];
-        if(comp) return comp(arg);
+const SlidesComponent = React.createClass({
+    propTypes: {
+        tv: propTypes.tv.isRequired,
+        animate: PropTypes.bool,
+        currentSlide: propTypes.slide.isRequired,
+    },
+
+    getSlideComponent(slideData) {
+        if (!slideData) return <div />;
+        const arg = { slide: slideData, key: slideData.id, tv: this.props.tv };
+        const comp = slideComponents[slideData.type];
+        if (comp) return comp(arg);
         return <div className="slide">(unknown slide type: {slideData.type})</div>;
     },
 
-
-    render: function() {
-        var slideData = this.props.currentSlide;
-        var slideComponent = this.getSlideComponent(slideData);
-        if(this.props.animate) slideComponent = (<ReactCSSTransitionGroup transitionName="slide">{slideComponent}</ReactCSSTransitionGroup>);
+    render() {
+        const slideData = this.props.currentSlide;
+        let slideComponent = this.getSlideComponent(slideData);
+        if (this.props.animate) {
+            slideComponent = (
+                <ReactCSSTransitionGroup transitionName="slide">{slideComponent}</ReactCSSTransitionGroup>
+            );
+        }
         return slideComponent;
-    }
-
+    },
 });
 
-module.exports = SlidesComponent;
+export default SlidesComponent;

@@ -1,22 +1,21 @@
-"use strict";
-var _ = require("lodash");
-var datums = {};
+import _ from "lodash";
+let datums = {};
 
-module.exports = {
-    update: function(data) {
+export default {
+    update(data) {
         datums = _.extend(datums, data);
     },
-    setValue: function(key, value) {
-        return (datums[key] = {value: value, mtime: 0, virtual: true});
+    setValue(key, value) {
+        return (datums[key] = { value, mtime: 0, virtual: true });
     },
-    getValue: function(key, defaultValue) {
-        var datum = datums[key];
-        if(datum) {
+    getValue(key, defaultValue) {
+        const datum = datums[key];
+        if (datum) {
             return datum.value;
         }
         return defaultValue;
     },
-    getFull: function(key) {
+    getFull(key) {
         return datums[key] || undefined;
-    }
+    },
 };

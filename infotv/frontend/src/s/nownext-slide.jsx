@@ -1,17 +1,17 @@
-var React = require("react/addons");
-var _ = require("lodash");
-var DatumManager = require("../datum");
-var moment = require("moment");
-var config = require("../config");
-var cx = require("classnames");
+import React from "react";
+import _ from "lodash";
+import DatumManager from "../datum";
+import moment from "moment";
+import config from "../config";
+import cx from "classnames";
 
 function renderProgram(prog) {
-    var startMoment = moment.unix(prog.start_ts);
-    var startTime = startMoment.format("HH:mm");
-    var endTime = moment.unix(prog.end_ts).format("HH:mm");
-    var className = cx({
-        "progInfo": true,
-        "soon": (Math.abs(moment().diff(startMoment)) < 5 * 60 * 1000)
+    const startMoment = moment.unix(prog.start_ts);
+    const startTime = startMoment.format("HH:mm");
+    const endTime = moment.unix(prog.end_ts).format("HH:mm");
+    const className = cx({
+        progInfo: true,
+        soon: (Math.abs(moment().diff(startMoment)) < 5 * 60 * 1000),
     });
 
     return (
@@ -22,26 +22,19 @@ function renderProgram(prog) {
     );
 }
 
-var NowNextSlide = React.createClass({
-
-    render: function () {
-        var onlyLoc = config.loc;
-        var content = [];
-        var schedule = DatumManager.getValue("schedule");
+const NowNextSlide = React.createClass({
+    render() {
+        const onlyLoc = config.loc;
+        const content = [];
+        const schedule = DatumManager.getValue("schedule");
         if (!schedule) return (<div>No schedule</div>);
-        var nowTs = (+new Date()) / 1000;
-        var order = schedule.location_order || [];
-        _.each(order, function (loc) {
+        const nowTs = (+new Date()) / 1000;
+        const order = schedule.location_order || [];
+        _.each(order, (loc) => {
             if (onlyLoc && onlyLoc !== loc) return;
-            var programs = _.filter(schedule.programs, function (prog) {
-                return prog.location === loc;
-            });
-            var currentProg = _.detect(programs, function (prog) {
-                return (nowTs >= prog.start_ts && nowTs < prog.end_ts);
-            });
-            var nextProg = _.detect(programs, function (prog) {
-                return (prog.start_ts >= nowTs);
-            });
+            const programs = _.filter(schedule.programs, (prog) => prog.location === loc);
+            let currentProg = _.detect(programs, (prog) => (nowTs >= prog.start_ts && nowTs < prog.end_ts));
+            let nextProg = _.detect(programs, (prog) => (prog.start_ts >= nowTs));
             if (!(currentProg || nextProg)) return;
 
             currentProg = (currentProg ? (
@@ -66,10 +59,9 @@ var NowNextSlide = React.createClass({
                 </table>
             </div>
         );
-    }
+    },
 });
 
-
-module.exports = {
-    view: NowNextSlide
+export default {
+    view: NowNextSlide,
 };

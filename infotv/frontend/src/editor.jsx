@@ -1,84 +1,22 @@
-var React = require("react");
-var $ = require('zepto-browserify').$;
-var _ = require("lodash");
-var editorComponents = require("./s").editors;
+import React from "react";
+const $ = require("zepto-browserify").$;
+import _ from "lodash";
+const editorComponents = require("./s").default.editors;
+import propTypes from "./prop-types";
 
-var EditorComponent = React.createClass({
-    componentWillMount: function() {
+const EditorComponent = React.createClass({
+    propTypes: {
+        deck: propTypes.deck.isRequired,
+        tv: propTypes.tv.isRequired,
+        currentSlide: propTypes.slide.isRequired,
     },
 
-    slideChanged: function(event) {
-        var id = event.target.value;
-        this.props.tv.viewSlideById(id);
-    },
-
-    slideTypeChanged: function(event) {
-        this.props.currentSlide.type = event.target.value;
-        this.props.tv.forceUpdate();
-    },
-
-    eepChanged: function(event) {
-        var eep = event.target.value;
-        this.props.deck.eep = (eep && eep.length ? eep : null);
-        this.props.tv.forceUpdate();
-    },
-
-    moveSlide: function(slide, direction) {
-        var slides = this.props.deck.slides;
-        var idx = slides.indexOf(slide);
-        if(idx === -1) return;
-        slide = slides.splice(idx, 1)[0];
-        var newIdx = idx + direction;
-        if(newIdx < 0) newIdx = 0;
-        if(newIdx >= slides.length) newIdx = slides.length;
-        slides.splice(newIdx, 0, slide);
-    },
-
-    moveSlideUp: function() {
-        this.moveSlide(this.props.currentSlide, -1);
-        this.props.tv.viewSlideById(this.props.currentSlide.id);
-    },
-
-    moveSlideDown: function() {
-        this.moveSlide(this.props.currentSlide, +1);
-        this.props.tv.viewSlideById(this.props.currentSlide.id);
-    },
-
-    slideDurationChanged: function(event) {
-        this.props.currentSlide.duration = 0 | event.target.value;
-        this.props.tv.forceUpdate();
-    },
-
-    confirmAndPublish: function() {
-        if(this.props.deck.slides.length <= 0) {
-            alert("Ei voi julkaista tyhjää pakkaa");
-            return false;
-        }
-        if(!confirm("Oletko varma että haluat julkaista nykyisen pakan?")) {
-            return false;
-        }
-        $.ajax({
-            "type": "POST",
-            "url": location.pathname,
-            "data": {"action": "post_deck", "data": JSON.stringify(this.props.deck)},
-            "success": function(data) {
-                alert(data.message || "wut :(");
-            },
-            "error": function() {
-                alert("it broke");
-            }
-        });
-        return true;
-    },
-
-    getSlideEditor: function(currentSlide) {
-        var editorComponentClass = editorComponents[currentSlide.type];
-        var editorComponent = (editorComponentClass ? editorComponentClass({slide: currentSlide, editor: this, tv: this.props.tv}) : "no editor for " + currentSlide.type);
-        var slideTypeOptions = _.keys(editorComponents).map(function(t){
-            return (<option key={t} value={t}>{t}</option>);
-        });
-        var slideTypeSelect = (<select key="slide-type" value={currentSlide.type} onChange={this.slideTypeChanged}>{slideTypeOptions}</select>);
-        var slideDurationInput = (<input type="number" value={currentSlide.duration} min="0" max="10" onChange={this.slideDurationChanged} />);
+    getSlideEditor(currentSlide) {
+        const editorComponentClass = editorComponents[currentSlide.type];
+        const editorComponent = (editorComponentClass ? editorComponentClass({ slide: currentSlide, editor: this, tv: this.props.tv }) : `no editor for ${currentSlide.type}`);
+        const slideTypeOptions = _.keys(editorComponents).map((t) => <option key={t} value={t}>{t}</option>);
+        const slideTypeSelect = (<select key="slide-type" value={currentSlide.type} onChange={this.slideTypeChanged}>{slideTypeOptions}</select>);
+        const slideDurationInput = (<input type="number" value={currentSlide.duration} min="0" max="10" onChange={this.slideDurationChanged} />);
 
         return (<div className="slide-editor">
             <div className="toolbar">
@@ -94,21 +32,86 @@ var EditorComponent = React.createClass({
         </div>);
     },
 
-    render: function() {
-        if(!this.props.deck) {
+    eepChanged(event) {
+        const eep = event.target.value;
+        this.props.deck.eep = (eep && eep.length ? eep : null);
+        this.props.tv.forceUpdate();
+    },
+
+    slideChanged(event) {
+        const id = event.target.value;
+        this.props.tv.viewSlideById(id);
+    },
+
+    slideTypeChanged(event) {
+        this.props.currentSlide.type = event.target.value;
+        this.props.tv.forceUpdate();
+    },
+
+    moveSlide(slide_, direction) {
+        const slides = this.props.deck.slides;
+        const idx = slides.indexOf(slide_);
+        if (idx === -1) return;
+        const slide = slides.splice(idx, 1)[0];
+        let newIdx = idx + direction;
+        if (newIdx < 0) newIdx = 0;
+        if (newIdx >= slides.length) newIdx = slides.length;
+        slides.splice(newIdx, 0, slide);
+    },
+
+    moveSlideUp() {
+        this.moveSlide(this.props.currentSlide, -1);
+        this.props.tv.viewSlideById(this.props.currentSlide.id);
+    },
+
+    moveSlideDown() {
+        this.moveSlide(this.props.currentSlide, +1);
+        this.props.tv.viewSlideById(this.props.currentSlide.id);
+    },
+
+    slideDurationChanged(event) {
+        this.props.currentSlide.duration = 0 | event.target.value;
+        this.props.tv.forceUpdate();
+    },
+
+    confirmAndPublish() {
+        if (this.props.deck.slides.length <= 0) {
+            alert("Ei voi julkaista tyhjää pakkaa");
+            return false;
+        }
+        if (!confirm("Oletko varma että haluat julkaista nykyisen pakan?")) {
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: location.pathname,
+            data: { action: "post_deck", data: JSON.stringify(this.props.deck) },
+            success(data) {
+                alert(data.message || "wut :(");
+            },
+            error() {
+                alert("it broke");
+            },
+        });
+        return true;
+    },
+
+    render() {
+        if (!this.props.deck) {
             return (<div>Missing deck :(</div>);
         }
-        var slides = this.props.deck.slides;
-        var options = slides.map(function(s, i) {
-            var text = "Slide " + (i + 1) + " (" + s.type + ") [" + s.id + "]";
-            if(s.duration <= 0) text += " (ei päällä)";
+        const slides = this.props.deck.slides;
+        const options = slides.map((s, i) => {
+            let text = `Slide ${i + 1} (${s.type}) [${s.id}]`;
+            if (s.duration <= 0) text += " (ei päällä)";
             return (<option key={s.id} value={s.id}>{text}</option>);
         });
-        var currentSlide = this.props.currentSlide;
-        if(currentSlide) {
-            var slideEditor = this.getSlideEditor(currentSlide);
+        const currentSlide = this.props.currentSlide;
+        let slideEditor = null;
+        if (currentSlide) {
+            slideEditor = this.getSlideEditor(currentSlide);
         }
-        return <div>
+        return (<div>
             <div className="editor-toolbar toolbar">
                 <button onClick={this.confirmAndPublish}>Julkaise muutokset</button>
             </div>
@@ -125,10 +128,8 @@ var EditorComponent = React.createClass({
             <div className="slide-editor-ctr">
                 {slideEditor}
             </div>
-        </div>;
-    }
-
+        </div>);
+    },
 });
 
-module.exports = EditorComponent;
-
+export default EditorComponent;
