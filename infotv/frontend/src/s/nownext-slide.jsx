@@ -22,44 +22,42 @@ function renderProgram(prog) {
     );
 }
 
-class NowNextSlide extends React.Component {
-    render() {
-        const onlyLoc = config.loc;
-        const content = [];
-        const schedule = DatumManager.getValue("schedule");
-        if (!schedule) return (<div>No schedule</div>);
-        const nowTs = (+new Date()) / 1000;
-        const order = schedule.location_order || [];
-        _.each(order, (loc) => {
-            if (onlyLoc && onlyLoc !== loc) return;
-            const programs = _.filter(schedule.programs, (prog) => prog.location === loc);
-            let currentProg = _.detect(programs, (prog) => (nowTs >= prog.start_ts && nowTs < prog.end_ts));
-            let nextProg = _.detect(programs, (prog) => (prog.start_ts >= nowTs));
-            if (!(currentProg || nextProg)) return;
+function NowNextSlide(props) {
+    const onlyLoc = config.loc;
+    const content = [];
+    const schedule = DatumManager.getValue("schedule");
+    if (!schedule) return (<div>No schedule</div>);
+    const nowTs = (+new Date()) / 1000;
+    const order = schedule.location_order || [];
+    _.each(order, (loc) => {
+        if (onlyLoc && onlyLoc !== loc) return;
+        const programs = _.filter(schedule.programs, (prog) => prog.location === loc);
+        let currentProg = _.detect(programs, (prog) => (nowTs >= prog.start_ts && nowTs < prog.end_ts));
+        let nextProg = _.detect(programs, (prog) => (prog.start_ts >= nowTs));
+        if (!(currentProg || nextProg)) return;
 
-            currentProg = (currentProg ? (
-                <div className="now"><span className="ntitle">Nyt</span> {renderProgram(currentProg)}</div>) : null);
+        currentProg = (currentProg ? (
+            <div className="now"><span className="ntitle">Nyt</span> {renderProgram(currentProg)}</div>) : null);
 
-            nextProg = (nextProg ? (
-                <div className="next"><span className="ntitle">Seuraavaksi</span> {renderProgram(nextProg)}
-                </div>) : null);
+        nextProg = (nextProg ? (
+            <div className="next"><span className="ntitle">Seuraavaksi</span> {renderProgram(nextProg)}
+            </div>) : null);
 
-            content.push(
-                <tr key={loc} className="nownext-table-row">
-                    <td className="nownext-table-cell loc">{loc}</td>
-                    <td className="nownext-table-cell current">{currentProg}</td>
-                    <td className="nownext-table-cell next">{nextProg}</td>
-                </tr>
-            );
-        });
-        return (
-            <div key={this.props.key} className="slide nownext-slide">
-                <table className="nownext_table">
-                    <tbody>{content}</tbody>
-                </table>
-            </div>
+        content.push(
+            <tr key={loc} className="nownext-table-row">
+                <td className="nownext-table-cell loc">{loc}</td>
+                <td className="nownext-table-cell current">{currentProg}</td>
+                <td className="nownext-table-cell next">{nextProg}</td>
+            </tr>
         );
-    }
+    });
+    return (
+        <div key={props.key} className="slide nownext-slide">
+            <table className="nownext_table">
+                <tbody>{content}</tbody>
+            </table>
+        </div>
+    );
 }
 
 export default {

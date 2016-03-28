@@ -4,14 +4,12 @@ import React from "react";
 import propTypes from "../prop-types";
 import { isImageURL } from "./utils";
 
-class ImageSlide extends React.Component {
-    render() {
-        const slide = this.props.slide;
-        const url = slide.src;
-        const style = {};
-        if (isImageURL(url)) style.backgroundImage = `url(${url})`;
-        return <div key={this.props.key} className="slide image-slide" style={style} />;
-    }
+function ImageSlide(props) {
+    const slide = props.slide;
+    const url = slide.src;
+    const style = {};
+    if (isImageURL(url)) style.backgroundImage = `url(${url})`;
+    return <div key={props.key} className="slide image-slide" style={style} />;
 }
 
 ImageSlide.propTypes = {

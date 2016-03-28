@@ -4,12 +4,10 @@ import React from "react";
 const markdown = require("markdown").markdown;
 import propTypes from "../prop-types";
 
-class TextSlide extends React.Component {
-    render() {
-        const slide = this.props.slide;
-        const html = markdown.toHTML(slide.content || "");
-        return <div key={this.props.key} className="slide text-slide" dangerouslySetInnerHTML={{ __html: html }} />;
-    }
+function TextSlide(props) {
+    const slide = props.slide;
+    const html = markdown.toHTML(slide.content || "");
+    return <div key={props.key} className="slide text-slide" dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 TextSlide.propTypes = {
