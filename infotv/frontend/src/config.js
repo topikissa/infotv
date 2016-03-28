@@ -1,5 +1,6 @@
-var _ = require("lodash");
-module.exports = _.extend(
+import _ from "lodash";
+
+export default _.extend(
     {},
     window.Options || {},
     require("query-string").parse(window.location.search)

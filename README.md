@@ -14,7 +14,7 @@ Try it out
 ```
 pip install -r requirements.txt
 (cd infotv/frontend && npm i && npm run build)
-(python dtv_test.py migrate && python dtv_test.py runserver) 
+(python manage.py migrate && python manage.py runserver)
 ```
 
 Notes for deployment

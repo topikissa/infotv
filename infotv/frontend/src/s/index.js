@@ -1,26 +1,32 @@
-var React = require("react/addons");
-var _ = require("lodash");
-var DummyEditor = require("./dummy-editor.jsx");
+import React from "react";
+import _ from "lodash";
+import DummyEditor from "./dummy-editor.jsx";
+import TextSlide from "./text-slide.jsx";
+import ImageSlide from "./image-slide.jsx";
+import MultiImageSlide from "./multi-image-slide.jsx";
+import NowNextSlide from "./nownext-slide.jsx";
+import SocialSlide from "./social-slide.jsx";
+import AnimeSlide from "./anime-slide.jsx";
 
-var modules = {
-    "text": require("./text-slide.jsx"),
-    "image": require("./image-slide.jsx"),
-    "multi-image": require("./multi-image-slide.jsx"),
-    "nownext": require("./nownext-slide.jsx"),
-    "social": require("./social-slide.jsx"),
-    "anime": require("./anime-slide.jsx"),
+const slideModules = {
+    text: TextSlide,
+    image: ImageSlide,
+    "multi-image": MultiImageSlide,
+    nownext: NowNextSlide,
+    social: SocialSlide,
+    anime: AnimeSlide,
 };
 
-var viewComponents = {};
-var editorComponents = {};
-_.each(modules, function (mod, key) {
-    mod = modules[key];
-    viewComponents[key] = React.createFactory(mod.view);
-    editorComponents[key] = React.createFactory(mod.editor || DummyEditor);
+const viewComponents = {};
+const editorComponents = {};
+_.each(slideModules, (mod, key) => {
+    const slideModule = slideModules[key];
+    viewComponents[key] = React.createFactory(slideModule.view);
+    editorComponents[key] = React.createFactory(slideModule.editor || DummyEditor);
 });
 
-module.exports = {
-    modules: modules,
+export default {
+    modules: slideModules,
     views: viewComponents,
-    editors: editorComponents
+    editors: editorComponents,
 };
