@@ -10,16 +10,18 @@ class Command(BaseCommand):
         make_option("--location-id", type=int, default=649360),
         make_option(
             "--app-id", type=str,
-            help="OpenWeatherMap App ID", required=True
+            help="OpenWeatherMap App ID"
         ),
     )
 
-    def handle(self, **options):
+    def handle(self, location_id, app_id, **options):
+        if not app_id:
+            raise ValueError("app_id required")
         resp = requests.get(
             url="http://api.openweathermap.org/data/2.5/weather",
-            params={"id": options["location_id"], "appid": options["app_id"]}
+            params={"id": location_id, "appid": app_id}
         )
         resp.raise_for_status()
-        datum, _ = Datum.objects.get_or_create(event=None, key="weather")
+        datum, _ = Datum.objects.get_or_create(event_slug=None, key="weather")
         datum.value = resp.json()
         datum.save()
