@@ -1,8 +1,8 @@
-var webpack = require('webpack');
+const webpack = require("webpack");
 
-var CURRENT_STYLE = process.env.INFOTV_STYLE || "desucon";
-var outputFsPath = process.env.OUTPUT_PATH || (__dirname + "/../static/infotv");
-var outputPublicPath = process.env.PUBLIC_PATH || "/static/infotv";
+const CURRENT_STYLE = process.env.INFOTV_STYLE || "desucon";
+const outputFsPath = process.env.OUTPUT_PATH || `${__dirname}/../static/infotv`;
+const outputPublicPath = process.env.PUBLIC_PATH || "/static/infotv";
 
 module.exports = {
     context: __dirname,
@@ -19,20 +19,20 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel',
+                loader: "babel",
             },
             {
                 test: /\.(woff|svg|otf|ttf|eot|png)(\?.*)?$/,
-                loader: 'url',
+                loader: "url",
             },
         ],
     },
     resolve: {
         alias: {
-            "current-style": "../styles/" + CURRENT_STYLE + "/less/style.less",
+            "current-style": `../styles/${CURRENT_STYLE}/less/style.less`,
         },
     },
     plugins: [
-        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fi/)
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fi/),
     ],
 };

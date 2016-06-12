@@ -22,7 +22,7 @@ function renderProgram(prog) {
     );
 }
 
-function NowNextSlide(props) {
+function NowNextSlide() {
     const onlyLoc = config.loc;
     const content = [];
     const schedule = DatumManager.getValue("schedule");

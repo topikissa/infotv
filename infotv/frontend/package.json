@@ -7,7 +7,7 @@
     "build": "webpack --verbose --progress",
     "watch": "webpack --verbose --progress --watch",
     "release": "webpack -p",
-    "lint": "eslint src --ext .js,.jsx"
+    "lint": "eslint src webpack.config.js --ext .js,.jsx"
   },
   "author": "Aarni Koskela <akx@iki.fi>",
   "license": "MIT",
