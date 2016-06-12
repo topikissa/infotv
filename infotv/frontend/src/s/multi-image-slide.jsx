@@ -75,7 +75,7 @@ class MultiImageSlide extends React.Component {
         }
         let style = {};
         if (image) style.backgroundImage = `url(${image.url})`;
-        return <div key={this.props.key} className="slide image-slide" style={style} onClick={this.reset} />;
+        return <div className="slide image-slide" style={style} onClick={this.reset} />;
     }
 }
 

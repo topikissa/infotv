@@ -127,7 +127,7 @@ export default class EditorComponent extends React.Component {
                 </label>
             </div>
             <div className="slide-selector toolbar">
-                <select value={currentSlide ? currentSlide.id : null} onChange={this.slideChanged} id="editor-select-slide">{options}</select>
+                <select value={currentSlide ? currentSlide.id : ""} onChange={this.slideChanged} id="editor-select-slide">{options}</select>
                 <button onClick={this.props.tv.addNewSlide}>Uusi</button>
             </div>
             <div className="slide-editor-ctr">
@@ -142,4 +142,3 @@ EditorComponent.propTypes = {
     tv: propTypes.tv.isRequired,
     currentSlide: propTypes.slide.isRequired,
 };
-

@@ -9,7 +9,7 @@ function ImageSlide(props) {
     const url = slide.src;
     const style = {};
     if (isImageURL(url)) style.backgroundImage = `url(${url})`;
-    return <div key={props.key} className="slide image-slide" style={style} />;
+    return <div className="slide image-slide" style={style} />;
 }
 
 ImageSlide.propTypes = {

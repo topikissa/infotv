@@ -52,7 +52,7 @@ function NowNextSlide(props) {
         );
     });
     return (
-        <div key={props.key} className="slide nownext-slide">
+        <div className="slide nownext-slide">
             <table className="nownext_table">
                 <tbody>{content}</tbody>
             </table>
