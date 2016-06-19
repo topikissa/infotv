@@ -3,7 +3,7 @@
 import React from "react";
 import _ from "lodash";
 import propTypes from "../prop-types";
-import { isImageURL } from "./utils";
+import { isImageURL } from "../utils";
 
 function parseImages(data) {
     return _(`${data || ""}`.split("\n")).map((line) => {

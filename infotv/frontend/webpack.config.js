@@ -7,7 +7,7 @@ const production = process.argv.indexOf("-p") !== -1;
 
 const config = {
     context: __dirname,
-    entry: "./src/main.js",
+    entry: ["whatwg-fetch", "./src/main.js"],
     bail: true,
     devtool: "source-map",
     output: {

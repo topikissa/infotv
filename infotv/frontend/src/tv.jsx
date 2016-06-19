@@ -1,12 +1,13 @@
 import React from "react";
+import QS from "query-string";
 import SlidesComponent from "./slides.jsx";
 import OverlayComponent from "./overlay.jsx";
 import EditorComponent from "./editor.jsx";
-const $ = require("zepto-browserify").$;
 import DatumManager from "./datum";
 import _ from "lodash";
 import stagger from "./stagger";
 import config from "./config";
+import { fetchJSON } from "./utils";
 
 function checkTallness() {
     document.body.classList.toggle("tall", (window.innerWidth < window.innerHeight));
@@ -103,45 +104,36 @@ export default class TVApp extends React.Component {
     }
 
     requestDeck() {
-        const self = this;
-        if (self.state.edit) return false; // When in edit mode, prevent auto-update
-        $.ajax({
-            url: location.pathname,
-            data: { action: "get_deck" },
-            success(data) {
+        if (this.state.edit) return false; // When in edit mode, prevent auto-update
+
+        fetchJSON(`${location.pathname}?${QS.stringify({ action: "get_deck" })}`)
+            .then((data) => {
                 const deck = data.deck;
-                if (!self.state.deck || self.state.deck.id !== deck.id) {
-                    self.setState({ deck, slideIndex: -1 });
-                    self.nextSlide();
+                if (!this.state.deck || this.state.deck.id !== deck.id) {
+                    this.setState({ deck, slideIndex: -1 });
+                    this.nextSlide();
                     console.log("new deck", deck);
                 }
                 DatumManager.update(data.datums || {});
-            },
-        });
+            });
+
         return true;
     }
 
     requestSchedule() {
-        const self = this;
-        $.ajax({
-            url: "/api/schedule/json2/",
-            data: { event: config.event },
-            success(data) {
+        fetchJSON(`/api/schedule/json2/?${QS.stringify({ event: config.event })}`)
+            .then((data) => {
                 DatumManager.setValue("schedule", data);
-                self.forceUpdate();
-            },
-        });
+                this.forceUpdate();
+            });
     }
 
     requestSocial() {
-        const self = this;
-        $.ajax({
-            url: "/api/social/",
-            success(data) {
+        fetchJSON("/api/social/")
+            .then((data) => {
                 DatumManager.setValue("social", data);
-                self.forceUpdate();
-            },
-        });
+                this.forceUpdate();
+            });
     }
 
     madokaTick() {

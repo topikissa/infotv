@@ -2,7 +2,7 @@
 
 import React from "react";
 import propTypes from "../prop-types";
-import { isImageURL } from "./utils";
+import { isImageURL } from "../utils";
 
 function ImageSlide(props) {
     const slide = props.slide;
