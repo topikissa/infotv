@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const autoprefixer = require("autoprefixer");
 
 const CURRENT_STYLE = process.env.INFOTV_STYLE || "desucon";
 const outputFsPath = process.env.OUTPUT_PATH || `${__dirname}/../static/infotv`;
@@ -35,6 +36,9 @@ const config = {
     },
     plugins: [
         new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fi/),
+    ],
+    postcss: [
+        autoprefixer({ browsers: ["last 2 versions"] }),
     ],
 };
 
