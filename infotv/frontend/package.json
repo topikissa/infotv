@@ -35,7 +35,6 @@
     "lodash": "^4.6.1",
     "markdown": "^0.5.0",
     "moment": "^2.10.3",
-    "node-libs-browser": "^0.5.2",
     "query-string": "^2.4.0",
     "react": "^15.1.0",
     "react-addons-css-transition-group": "^15.1.0",
