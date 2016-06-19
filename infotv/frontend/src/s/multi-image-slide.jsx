@@ -16,7 +16,8 @@ function parseImages(data) {
             duration,
             url: m[2],
         };
-    }).compact().value();
+    }).compact()
+        .value();
 }
 
 class MultiImageSlide extends React.Component {
@@ -96,11 +97,13 @@ class MultiImageSlideEditor extends React.Component {
 
     render() {
         const slide = this.props.slide;
-        return (<div className="multi-image-slide-editor">
-            <textarea value={slide.config || ""} onChange={this.setConfig} placeholder="pituus (msek);HTTP-osoite ..." />
-            <br />
-            {parseImages(slide.config).length} kelvollista kuvaa
-            </div>);
+        return (
+            <div className="multi-image-slide-editor">
+                <textarea value={slide.config || ""} onChange={this.setConfig} placeholder="pituus (msek);HTTP-osoite ..." />
+                <br />
+                {parseImages(slide.config).length} kelvollista kuvaa
+            </div>
+        );
     }
 }
 

@@ -1,7 +1,8 @@
 import _ from "lodash";
+import QS from "query-string";
 
 export default _.extend(
     {},
     window.Options || {},
-    require("query-string").parse(window.location.search)
+    QS.parse(window.location.search)
 );

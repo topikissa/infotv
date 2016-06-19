@@ -16,9 +16,9 @@ function renderProgram(prog) {
 
     return (
         <span className={className}>
-        <span className="times">{startTime}-{endTime}</span>
-        <span className="title">{prog.title}</span>
-    </span>
+            <span className="times">{startTime}-{endTime}</span>
+            <span className="title">{prog.title}</span>
+        </span>
     );
 }
 
