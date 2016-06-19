@@ -1,8 +1,8 @@
 import React from "react";
-const $ = require("zepto-browserify").$;
 import _ from "lodash";
 const editorComponents = require("./s").default.editors;
 import propTypes from "./prop-types";
+import { fetchJSON } from "./utils";
 
 export default class EditorComponent extends React.Component {
     constructor(props, context) {
@@ -87,17 +87,18 @@ export default class EditorComponent extends React.Component {
         if (!confirm("Oletko varma että haluat julkaista nykyisen pakan?")) {
             return false;
         }
-        $.ajax({
-            type: "POST",
-            url: location.pathname,
-            data: { action: "post_deck", data: JSON.stringify(this.props.deck) },
-            success(data) {
+
+        const deckFormData = new FormData();
+        deckFormData.append("action", "post_deck");
+        deckFormData.append("data", JSON.stringify(this.props.deck));
+        fetchJSON(location.pathname, { method: "POST", body: deckFormData })
+            .then((data) => {
                 alert(data.message || "wut :(");
-            },
-            error() {
-                alert("it broke");
-            },
-        });
+            })
+            .catch((err) => {
+                alert((err.body && err.body.message) || "it broke");
+            });
+
         return true;
     }
 
@@ -127,7 +128,7 @@ export default class EditorComponent extends React.Component {
                 </label>
             </div>
             <div className="slide-selector toolbar">
-                <select value={currentSlide ? currentSlide.id : null} onChange={this.slideChanged} id="editor-select-slide">{options}</select>
+                <select value={currentSlide ? currentSlide.id : ""} onChange={this.slideChanged} id="editor-select-slide">{options}</select>
                 <button onClick={this.props.tv.addNewSlide}>Uusi</button>
             </div>
             <div className="slide-editor-ctr">
@@ -142,4 +143,3 @@ EditorComponent.propTypes = {
     tv: propTypes.tv.isRequired,
     currentSlide: propTypes.slide.isRequired,
 };
-

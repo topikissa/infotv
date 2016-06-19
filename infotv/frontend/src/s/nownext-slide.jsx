@@ -16,13 +16,13 @@ function renderProgram(prog) {
 
     return (
         <span className={className}>
-        <span className="times">{startTime}-{endTime}</span>
-        <span className="title">{prog.title}</span>
-    </span>
+            <span className="times">{startTime}-{endTime}</span>
+            <span className="title">{prog.title}</span>
+        </span>
     );
 }
 
-function NowNextSlide(props) {
+function NowNextSlide() {
     const onlyLoc = config.loc;
     const content = [];
     const schedule = DatumManager.getValue("schedule");
@@ -52,7 +52,7 @@ function NowNextSlide(props) {
         );
     });
     return (
-        <div key={props.key} className="slide nownext-slide">
+        <div className="slide nownext-slide">
             <table className="nownext_table">
                 <tbody>{content}</tbody>
             </table>

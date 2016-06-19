@@ -7,7 +7,7 @@ import propTypes from "../prop-types";
 function TextSlide(props) {
     const slide = props.slide;
     const html = markdown.toHTML(slide.content || "");
-    return <div key={props.key} className="slide text-slide" dangerouslySetInnerHTML={{ __html: html }} />;
+    return <div className="slide text-slide" dangerouslySetInnerHTML={{ __html: html }} />;
 }
 
 TextSlide.propTypes = {

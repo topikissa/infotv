@@ -4,12 +4,12 @@ import DatumManager from "./datum";
 
 export default class OverlayComponent extends React.Component {
     componentWillMount() {
-        this._clockUpdateTimer = setInterval(() => { this.forceUpdate(); }, 5000);
+        this.clockUpdateTimer = setInterval(() => { this.forceUpdate(); }, 5000);
     }
 
     componentWillUnmount() {
-        clearInterval(this._clockUpdateTimer);
-        this._clockUpdateTimer = null;
+        clearInterval(this.clockUpdateTimer);
+        this.clockUpdateTimer = null;
     }
 
     renderWeather() {
@@ -24,7 +24,7 @@ export default class OverlayComponent extends React.Component {
         }
         try {
             icon = weather.weather[0].icon;
-            icon = <img src={`http://openweathermap.org/img/w/${icon}.png`} />;
+            icon = <img src={`http://openweathermap.org/img/w/${icon}.png`} alt="weather icon" />;
         } catch (problem) {
             icon = null;
         }

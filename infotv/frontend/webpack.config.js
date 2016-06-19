@@ -1,12 +1,14 @@
-var webpack = require('webpack');
+const webpack = require("webpack");
+const autoprefixer = require("autoprefixer");
 
-var CURRENT_STYLE = process.env.INFOTV_STYLE || "desucon";
-var outputFsPath = process.env.OUTPUT_PATH || (__dirname + "/../static/infotv");
-var outputPublicPath = process.env.PUBLIC_PATH || "/static/infotv";
+const CURRENT_STYLE = process.env.INFOTV_STYLE || "desucon";
+const outputFsPath = process.env.OUTPUT_PATH || `${__dirname}/../static/infotv`;
+const outputPublicPath = process.env.PUBLIC_PATH || "/static/infotv";
+const production = process.argv.indexOf("-p") !== -1;
 
-module.exports = {
+const config = {
     context: __dirname,
-    entry: "./src/main.js",
+    entry: ["whatwg-fetch", "./src/main.js"],
     bail: true,
     devtool: "source-map",
     output: {
@@ -19,20 +21,35 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
-                loader: 'babel',
+                loader: "babel",
             },
             {
                 test: /\.(woff|svg|otf|ttf|eot|png)(\?.*)?$/,
-                loader: 'url',
+                loader: "url",
             },
         ],
     },
     resolve: {
         alias: {
-            "current-style": "../styles/" + CURRENT_STYLE + "/less/style.less",
+            "current-style": `../styles/${CURRENT_STYLE}/less/style.less`,
         },
     },
     plugins: [
-        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fi/)
+        new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|fi/),
+    ],
+    postcss: [
+        autoprefixer({ browsers: ["last 2 versions"] }),
     ],
 };
+
+if (production) {
+    config.plugins.push(
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production"),
+            },
+        })
+    );
+}
+
+module.exports = config;

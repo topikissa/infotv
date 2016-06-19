@@ -2,14 +2,14 @@
 
 import React from "react";
 import propTypes from "../prop-types";
-import { isImageURL } from "./utils";
+import { isImageURL } from "../utils";
 
 function ImageSlide(props) {
     const slide = props.slide;
     const url = slide.src;
     const style = {};
     if (isImageURL(url)) style.backgroundImage = `url(${url})`;
-    return <div key={props.key} className="slide image-slide" style={style} />;
+    return <div className="slide image-slide" style={style} />;
 }
 
 ImageSlide.propTypes = {

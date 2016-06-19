@@ -3,7 +3,7 @@
 import React from "react";
 import _ from "lodash";
 import propTypes from "../prop-types";
-import { isImageURL } from "./utils";
+import { isImageURL } from "../utils";
 
 function parseImages(data) {
     return _(`${data || ""}`.split("\n")).map((line) => {
@@ -16,7 +16,8 @@ function parseImages(data) {
             duration,
             url: m[2],
         };
-    }).compact().value();
+    }).compact()
+        .value();
 }
 
 class MultiImageSlide extends React.Component {
@@ -75,7 +76,7 @@ class MultiImageSlide extends React.Component {
         }
         let style = {};
         if (image) style.backgroundImage = `url(${image.url})`;
-        return <div key={this.props.key} className="slide image-slide" style={style} onClick={this.reset} />;
+        return <div className="slide image-slide" style={style} onClick={this.reset} />;
     }
 }
 
@@ -96,11 +97,13 @@ class MultiImageSlideEditor extends React.Component {
 
     render() {
         const slide = this.props.slide;
-        return (<div className="multi-image-slide-editor">
-            <textarea value={slide.config || ""} onChange={this.setConfig} placeholder="pituus (msek);HTTP-osoite ..." />
-            <br />
-            {parseImages(slide.config).length} kelvollista kuvaa
-            </div>);
+        return (
+            <div className="multi-image-slide-editor">
+                <textarea value={slide.config || ""} onChange={this.setConfig} placeholder="pituus (msek);HTTP-osoite ..." />
+                <br />
+                {parseImages(slide.config).length} kelvollista kuvaa
+            </div>
+        );
     }
 }
 
