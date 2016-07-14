@@ -33,6 +33,7 @@ Notes of other persuasions
   hosting the app also serves the Desucon.fi API.  This will likely
   not be the case for you, dear reader.
 * The frontend supports these query string parameters:
+  * `?edit=1` -- edit slides
   * `?only=slideclass` -- show only a slide of class `slideclass`
   * `?slow=1` -- disable transitions (for poor ol' Raspberry Pis)
   * `?loc=location` -- show only the `location` location on `nownext`
