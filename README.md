@@ -1,5 +1,8 @@
-Desucon InfoTV
+Telkku-Kelkku - Ropecon infoTV
 ==============
+
+NOTE: this readme is NOT up to date
+-----------------------------------
 
 This packaging may still be a little rough and raw.
 

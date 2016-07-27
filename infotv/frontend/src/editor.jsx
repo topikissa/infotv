@@ -21,7 +21,7 @@ export default class EditorComponent extends React.Component {
         const editorComponent = (editorComponentClass ? editorComponentClass({ slide: currentSlide, editor: this, tv: this.props.tv }) : `no editor for ${currentSlide.type}`);
         const slideTypeOptions = _.keys(editorComponents).map((t) => <option key={t} value={t}>{t}</option>);
         const slideTypeSelect = (<select key="slide-type" value={currentSlide.type} onChange={this.slideTypeChanged}>{slideTypeOptions}</select>);
-        const slideDurationInput = (<input type="number" value={currentSlide.duration} min="0" max="10" onChange={this.slideDurationChanged} />);
+        const slideDurationInput = (<input type="number" value={currentSlide.duration} min="0" max="60" onChange={this.slideDurationChanged} />);
 
         return (<div className="slide-editor">
             <div className="toolbar">

@@ -19,6 +19,7 @@ export default class TVApp extends React.Component {
         this.madokaTick = this.madokaTick.bind(this);
         this.requestDeck = this.requestDeck.bind(this);
         this.requestSchedule = this.requestSchedule.bind(this);
+        this.requestChanges = this.requestChanges.bind(this);
         this.requestSocial = this.requestSocial.bind(this);
         this.slideSwitchTick = this.slideSwitchTick.bind(this);
         this.addNewSlide = this.addNewSlide.bind(this);
@@ -36,11 +37,13 @@ export default class TVApp extends React.Component {
         const self = this;
         this.deckUpdater = stagger({ interval: [50 * 1000, 70 * 1000], callback: self.requestDeck });
         this.scheduleUpdater = stagger({ interval: [60 * 4 * 1000, 60 * 6 * 1000], callback: self.requestSchedule });
+        this.changesUpdater = stagger({ interval: [60 * 4 * 1000, 60 * 6 * 1000], callback: self.requestChanges });
         this.socialUpdater = stagger({ interval: [50 * 1000, 90 * 1000], callback: self.requestSocial });
         this.slideSwitchTimer = setInterval(self.slideSwitchTick, 3500);
         this.madokaTimer = setInterval(self.madokaTick, 10000);
         this.requestDeck();
         this.requestSchedule();
+        this.requestChanges();
         this.requestSocial();
         if (config.edit) this.enableEditing();
         else document.body.classList.add("show");
@@ -51,6 +54,7 @@ export default class TVApp extends React.Component {
     componentWillUnmount() {
         this.deckUpdater.stop();
         this.scheduleUpdater.stop();
+        this.changesUpdater.stop();
         this.socialUpdater.stop();
         clearInterval(this.madokaTimer);
         clearInterval(this.slideSwitchTimer);
@@ -121,12 +125,27 @@ export default class TVApp extends React.Component {
         return true;
     }
 
+    requestChanges() {
+        fetchJSON("/static/infotv/" + config.event + "_orig.json")
+                .then((data) => {
+                    DatumManager.setValue("orig_schedule", data);    
+                    this.forceUpdate();
+                });
+    
+        fetchJSON(`https://conbase.ropecon.fi/programs/export.json`)
+                .then((data) => {
+                    DatumManager.setValue("current_schedule", data);
+                    this.forceUpdate();
+                });
+    }
+
     requestSchedule() {
-        fetchJSON(`/api/schedule/json2/?${QS.stringify({ event: config.event })}`)
-            .then((data) => {
-                DatumManager.setValue("schedule", data);
-                this.forceUpdate();
-            });
+
+        fetchJSON(`https://conbase.ropecon.fi/programs/export.json`)
+                .then((data) => {
+                    DatumManager.setValue("schedule", data);
+                    this.forceUpdate();
+                });
     }
 
     requestSocial() {
