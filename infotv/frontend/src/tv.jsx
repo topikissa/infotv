@@ -181,6 +181,7 @@ export default class TVApp extends React.Component {
                 <SlidesComponent tv={this} currentSlide={currentSlide} animate={animate} />
             </div>
             <div id="overlay" key="overlay">
+			<img id="lohhe" src="/static/infotv/rcon-small.png"/>
                 <OverlayComponent />
             </div>
             {eep}
