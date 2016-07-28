@@ -1,67 +1,120 @@
 Telkku-Kelkku - Ropecon infoTV
-==============
+==============================
 
-NOTE: this readme is NOT up to date
------------------------------------
 
-This packaging may still be a little rough and raw.
 
-In particular, it may be a Good Idea to use Git submodules
-and `pip install -e` to set things up.
+Telkku-Kelkku is a fork of Desucon infotv for use in Ropecon 2016. Specific differences are adaptation to use conbase API for programme data and the Ropecon specific styling. Additionally we have implemented new slide type for displaying programme changes.
 
-Try it out
-----------
 
-(Set up a virtualenv first, naturally.)
+Setting up a development instance
+---------------------------------
 
-```
-pip install -r requirements.txt
-(cd infotv/frontend && npm i && npm run build)
-(python manage.py migrate && python manage.py runserver)
-```
+prerequisites:
+At least the following packages (TODO check) are required on Ubuntu 16.04 system:
+nodejs-legacy npm virtualenv python-pip git
 
-Notes for deployment
---------------------
+(note. also nodejs package should be at least version 4+, this is not the case of versions in for example Ubuntu 14.04 repositories)
 
-* Use `npm run release` instead of `npm run build`
-  when deploying.  Otherwise your bandwidth will be sad.
-* The `infotv_cache_weather` management command should be run
-  periodically to cache weather data (if required).
-  You'll need an API key from OpenWeatherMap for that.
-
-Notes of other persuasions
---------------------------
-
-* The `anime`, `nownext` and `social` slides assume that the server
-  hosting the app also serves the Desucon.fi API.  This will likely
-  not be the case for you, dear reader.
-* The frontend supports these query string parameters:
-  * `?edit=1` -- edit slides
-  * `?only=slideclass` -- show only a slide of class `slideclass`
-  * `?slow=1` -- disable transitions (for poor ol' Raspberry Pis)
-  * `?loc=location` -- show only the `location` location on `nownext`
-    slides (useful for room-specific schedule displays)
-* Setting the environment variable `INFOTV_STYLE` to something other than
-  the implicit "desucon" makes the Webpack build process read styles
-  from another `styles/...` subdirectory when creating the bundle.
-
-Settings
---------
-
-* `INFOTV_POLICY_CLASS`:
-  A dotted path to a class that declares certain
-  authentication and lookup policies (see `infotv.policy`)
-* `INFOTV_EVENT_MODEL`:
-  A dotted path to the model for "events" (if the default policy is used).
-  If None, no actual DB lookup is done for events.
-* `INFOTV_EVENT_SLUG_ATTR`:
-  The name of a "slug"/unique-identifier attribute in the event model above
-  (if the default policy is used).  Defaults to `slug`.
-
-Running tests
--------------
+installation steps:
 
 ```
-pip install -r requirements_dev.txt
-python runtests.py
+virtualenv venv-infotv			# creating virtual python enviroment
+source venv-infotv/bin/activate		# activating the virtual enviroment
+git clone https://github.com/topikissa/infotv.git
+cd infotv/
+pip install -e .
+cd infotv/frontend 
+npm install
+INFOTV_STYLE=ropecon npm run build
+cd ../..
+python manage.py migrate
+python manage.py createsuperuser  	# create user "staff", needed for editing slides
 ```
+
+Using the tv
+------------
+
+```
+python manage.py runserver		#start the server
+```
+
+127.0.0.1:8000/admin/  			# login ass user "staff"
+127.0.0.1:8000/con2016/infotv   	#  tv-view
+127.0.0.1:8000/con2016/infotv?edit=1  	#  editing the slides after logging as user "staff"
+
+
+Other queryparameter options:
+* `?only=slideclass` -- show only a slide of class `slideclass`
+* `?slow=1` -- disable transitions (for poor ol' Raspberry Pis)
+* `?loc=location` -- show only the `location` location on `nownext` slides (useful for room-specific schedule displays)
+
+
+Setting up a production instance
+------------------------------
+(modified from: https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-apache-and-mod_wsgi-on-ubuntu-14-04)
+
+
+* First set up a development instance and test that it is working
+
+* Then generate a new random SECRET_KEY value and replace the one in
+
+```
+/infotvpath/infotv/infotv_prod/settings.py
+
+```
+
+run a release build:
+```
+INFOTV_STYLE=ropecon npm run release	
+```
+
+instal apache etc.:
+
+```
+sudo apt-get update
+sudo apt-get install python3-pip apache2 libapache2-mod-wsgi-py3
+
+edit the default virtual host file:
+
+```
+sudo nano /etc/apache2/sites-available/000-default.conf
+
+```
+Add the following settings:
+(Replace the infotvpath with a directory path you have installed the development instance in!)
+
+```
+<VirtualHost *:80>
+    . . .
+
+    Alias /static /infotvpath/infotv/static
+    <Directory /infotvpath/infotv/static>
+        Require all granted
+    </Directory>
+
+    <Directory /infotvpath/infotv/infotv_prod>
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+
+    WSGIDaemonProcess myproject python-path=/infotvpath/infotv:/infotvpath/venv-infotv/lib/python2.7/site-packages
+    WSGIProcessGroup infotv
+    WSGIScriptAlias / /infotvpath/infotv/infotv_prod/wsgi.py
+
+</VirtualHost>
+
+```
+
+Fix permissions for apache:
+```
+chmod 664 ~/infotvpath/infotv/db.sqlite3
+sudo chown :www-data ~/infotvpath/infotv/db.sqlite3
+sudo chown :www-data ~/infotvpath/infotv
+```
+
+Restart apache:
+```
+sudo service apache2 restart
+```
+
