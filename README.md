@@ -37,10 +37,11 @@ Using the tv
 ```
 python manage.py runserver		#start the server
 ```
-
+```
 127.0.0.1:8000/admin/  			# login ass user "staff"
 127.0.0.1:8000/con2016/infotv   	#  tv-view
 127.0.0.1:8000/con2016/infotv?edit=1  	#  editing the slides after logging as user "staff"
+```
 
 
 Other queryparameter options:
