@@ -187,10 +187,13 @@ function ChangesSlide() {
             changeType = "Peruttu";
             changeClass = "cancellation";
         }
+        let typeEntry = 
+            <div className={changeClass}><span className="ctitle">{changeType}</span></div>;
         let progEntry = 
-            <div className={changeClass}><span className="ctitle">{changeType}</span> {renderChanges(prog, startTs, endTs)}</div>;
+            <div className={changeClass}>{renderChanges(prog, startTs, endTs)}</div>;
         content.push(
             <tr key={prog.title+loc} className="changes-table-row">
+                <td className="changes-table-cell current">{typeEntry}</td>
                 <td className="changes-table-cell current">{progEntry}</td>
                 <td className="changes-table-cell loc">{loc}</td>
             </tr>
