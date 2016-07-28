@@ -3,14 +3,14 @@ Telkku-Kelkku - Ropecon infoTV
 
 
 
-Telkku-Kelkku is a fork of Desucon infotv for use in Ropecon 2016. Specific differences are adaptation to use conbase API for programme data and the Ropecon specific styling. Additionally we have implemented new slide type for displaying programme changes.
+Telkku-Kelkku is a fork of Desucon infotv for use in Ropecon 2016. Specific differences are adaptation to a the conbase API for programme data and the Ropecon specific styling. Additionally we have implemented a new slide type for displaying programme changes.
 
 
 Setting up a development instance
 ---------------------------------
 
 prerequisites:
-At least the following packages (TODO check) are required on Ubuntu 16.04 system:
+At least the following packages are required on Ubuntu 16.04 system:
 nodejs-legacy npm virtualenv python-pip git
 
 (note. also nodejs package should be at least version 4+, this is not the case of versions in for example Ubuntu 14.04 repositories)
