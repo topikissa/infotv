@@ -89,7 +89,7 @@ Add the following settings:
 <VirtualHost *:80>
     . . .
 
-    Alias /static /infotvpath/infotv/static
+    Alias /static /infotvpath/infotv/infotv/static
     <Directory /infotvpath/infotv/static>
         Require all granted
     </Directory>
@@ -100,7 +100,7 @@ Add the following settings:
         </Files>
     </Directory>
 
-    WSGIDaemonProcess myproject python-path=/infotvpath/infotv:/infotvpath/venv-infotv/lib/python2.7/site-packages
+    WSGIDaemonProcess infotv python-path=/infotvpath/infotv:/infotvpath/venv-infotv/lib/python2.7/site-packages
     WSGIProcessGroup infotv
     WSGIScriptAlias / /infotvpath/infotv/infotv_prod/wsgi.py
 
