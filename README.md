@@ -74,13 +74,14 @@ instal apache etc.:
 ```
 sudo apt-get update
 sudo apt-get install python3-pip apache2 libapache2-mod-wsgi-py3
+```
 
 edit the default virtual host file:
 
 ```
 sudo nano /etc/apache2/sites-available/000-default.conf
-
 ```
+
 Add the following settings:
 (Replace the infotvpath with a directory path you have installed the development instance in!)
 
