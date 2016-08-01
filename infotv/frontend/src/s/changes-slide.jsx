@@ -87,9 +87,13 @@ function ChangesSlide() {
 
         // if no entry found then this is a NEW program
         if (!origProg) {
-            currentProg.reason = newStr;
-            // add the entry to the list of changed 
-            changeList.push(currentProg);
+            // compare times, if time in the past then now need to show
+            const currentEndTs = getEndTs(currentProg);  
+            if (currentEndTs > nowTs) {
+                currentProg.reason = newStr;
+                // add the entry to the list of changed 
+                changeList.push(currentProg);
+            }
             return;
         }
 
@@ -138,10 +142,13 @@ function ChangesSlide() {
     // loop trough the original entries once more and check for cancelled entries
     _.each(origSchedule, (prog) => {
         if (!prog.notDeleted) {
-        prog.reason = removedStr;            
-        // add the entry to the list of changed 
-        changeList.push(prog);
-        return;
+            const endTs = getEndTs(prog);  
+            if (endTs > nowTs) {
+                prog.reason = removedStr;            
+                // add the entry to the list of changed 
+                changeList.push(prog);
+            }
+            return;
         }
         
     });
