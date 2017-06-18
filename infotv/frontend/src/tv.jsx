@@ -157,7 +157,7 @@ export default class TVApp extends React.Component {
     }
 
     madokaTick() {
-        const shouldMadoka = ((new Date()).getHours() < 1 && (Math.random() < 0.1));
+        const shouldMadoka = false; // permanently disable special illegible night font
         document.getElementById("content").classList.toggle("madoka", shouldMadoka);
     }
 
