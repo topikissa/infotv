@@ -48,9 +48,14 @@ export default class EditorComponent extends React.Component {
         this.props.tv.viewSlideById(id);
     }
 
-    slideTypeChanged(event) {
-        this.props.currentSlide.type = event.target.value;
-        this.props.tv.forceUpdate();
+    slideTypeChanged(event) { 
+        if (this.textSlideHasContent() || this.imageSlideHasContent() || this.multi_imageSlideHasContent()) { 
+           if (!confirm("Oletko varma? Slidessa on sisältöä, joka tuhoutuu sliden tyyppiä muutettaessa.")) {
+              return;
+           }
+        }
+       this.props.currentSlide.type = event.target.value;
+       this.props.tv.forceUpdate();
     }
 
     moveSlide(slide_, direction) {
@@ -72,6 +77,18 @@ export default class EditorComponent extends React.Component {
     moveSlideDown() {
         this.moveSlide(this.props.currentSlide, +1);
         this.props.tv.viewSlideById(this.props.currentSlide.id);
+    }
+
+    textSlideHasContent() {
+	return (this.props.currentSlide.type === "text" && typeof this.props.currentSlide.content !== 'undefined' && this.props.currentSlide.content.length > 0);
+    }
+    
+    imageSlideHasContent() {
+	return (this.props.currentSlide.type === "image" && typeof this.props.currentSlide.src !== 'undefined' && this.props.currentSlide.src.length > 0);
+    }
+
+    multi_imageSlideHasContent() {
+	return (this.props.currentSlide.type === "multi-image" && typeof this.props.currentSlide.config !== 'undefined' && this.props.currentSlide.config.length > 0);
     }
 
     slideDurationChanged(event) {
