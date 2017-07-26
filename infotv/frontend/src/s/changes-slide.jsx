@@ -6,13 +6,13 @@ import config from "../config";
 import cx from "classnames";
 
 function renderChanges(prog, startTs, endTs) {
+// TODO this function is identical to renderProgram in nowNext-slide and might be imported from there
 
-    const weekdays = ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]; 
     const startMoment = moment.unix(startTs);
-    const startDate = new Date(startTs*1000);
-    const startDay = weekdays[startDate.getDay()];
+    const startDay = getWeekday(startTs);
     const startTime = startMoment.format("HH:mm");
     const endTime = moment.unix(endTs).format("HH:mm");
+    const endDay = getWeekday(endTs);
     const className = cx({
         progInfo: true,
         //soon: (Math.abs(moment().diff(startMoment)) < 5 * 60 * 1000),
@@ -21,10 +21,21 @@ function renderChanges(prog, startTs, endTs) {
     return (
         <span className={className}>
             <span className="days">{startDay} </span>
-            <span className="times">{startTime}-{endTime}</span>
+            <span className="times">{startTime} -</span>
+            <span className="days">{endDay} </span>
+            <span className="times">{endTime}</span>
             <span className="title">{prog.title}</span>
         </span>
     );
+}
+
+function getWeekday(timeStamp) {
+
+
+    const weekdays = ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"]; 
+    const date = new Date(timeStamp*1000);
+    return weekdays[date.getDay()];
+
 }
 
 function getStartTs(prog) {
