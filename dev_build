@@ -1,0 +1,4 @@
+cd infotv/frontend/
+INFOTV_STYLE=ropecon npm run build
+cd ../..
+
