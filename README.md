@@ -113,11 +113,9 @@ update manage.py file to point to infotv_prod settings
 ```
 
 
-```
 consider changing sqlite3 database to something else like postgresql
 ( https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04 )
 
-```
 
 
 Fix permissions for apache:
