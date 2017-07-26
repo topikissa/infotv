@@ -182,11 +182,6 @@ function ChangesSlide() {
 
         if (entryCounter >= entriesShown) return false; // only show first entries
 
-        // TODO remove
-        // Ropecon2016 specific fixes
-        // Remove entries for Kokemuspiste programme which were not in the program-booklet anyway
-        if (loc.indexOf("Talvipuutarha") !== -1) return; 
-
         entryCounter++;
 
         const startTs = getStartTs(prog);
