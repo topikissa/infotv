@@ -182,6 +182,23 @@ function ChangesSlide() {
 
         if (entryCounter >= entriesShown) return false; // only show first entries
 
+       
+
+        // TODO remove
+        // Ropecon2017 specific fixes
+        // Remove entries for Pöytäpelit programme not located in the Halli 5
+        var notIncluded = false;
+        _.each(prog.tags, (tag) => {
+            if (tag.indexOf("Pöytäpelit") !== -1) {
+                if (loc.indexOf("Halli 5") === -1) {
+                    notIncluded=true;
+                    return;
+                }
+            }
+        });
+        if (notIncluded) return;
+
+
         entryCounter++;
 
         const startTs = getStartTs(prog);
