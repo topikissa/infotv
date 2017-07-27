@@ -37,6 +37,19 @@ function getWeekday(timeStamp) {
 
 }
 
+function getLocationString(prog) {
+        var numLocs = 0;
+        var locString = "";
+        _.each(prog.loc, (loc) => {
+            if (numLocs > 0) {
+                locString = locString + ", ";
+            }
+            locString = locString + loc;
+            numLocs = numLocs +1;
+        });
+        return locString;
+}
+
 function NowNextSlide() {
 
 
@@ -58,7 +71,7 @@ function NowNextSlide() {
         // NOTE: the programme entries in the conbase json api are ordered by time
         if (entryCounter >= entriesShown) return false; // only show first entries
 
-        const loc = prog.loc[0];  // ugly hack to get the string out 
+        const loc = getLocationString(prog);  
          if (onlyLoc && loc.indexOf(onlyLoc) === -1) return; // only show entries for current location. (Match given location limiter to the prefix of programme location)
 
         const startDate = new Date(prog.date+"T"+prog.time);  

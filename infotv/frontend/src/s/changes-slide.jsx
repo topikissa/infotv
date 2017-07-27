@@ -57,6 +57,21 @@ function getEndTs(prog) {
 
 }
 
+
+
+function getLocationString(prog) {
+        var numLocs = 0;
+        var locString = "";
+        _.each(prog.loc, (loc) => {
+            if (numLocs > 0) {
+                locString = locString + ", ";
+            }
+            locString = locString + loc;
+            numLocs = numLocs +1;
+        });
+        return locString;
+}
+
 function ChangesSlide() {
 
 
@@ -135,8 +150,8 @@ function ChangesSlide() {
             }
 
             // location
-            const currentLog = currentProg.loc[0];
-            const origLog = origProg.loc[0];
+            const currentLog = getLocationString(currentProg);
+            const origLog = getLocationString(origProg);
             if (origLog !== currentLog) {
                 currentProg.reason = changeStr;            
                 // add the entry to the list of changed 
@@ -177,7 +192,7 @@ function ChangesSlide() {
     _.each(changeList, (prog) => {
 
 
-        const loc = prog.loc[0];  // ugly hack to get the string out 
+        const loc = getLocationString(prog);
         if (onlyLoc && loc.indexOf(onlyLoc) === -1) return; // only show entries for current location. (Match given location limiter to the prefix of programme location)
 
         if (entryCounter >= entriesShown) return false; // only show first entries
