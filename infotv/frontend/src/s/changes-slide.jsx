@@ -249,7 +249,7 @@ function ChangesSlide() {
     return (
         <div className="slide changes-slide">
         <h1>Ohjelmamuutokset</h1>
-        <div className="scrollable">
+        <div className="scrollable-changes">
             <p>
             <table className="changes_table">
                 <tbody>{content}</tbody>

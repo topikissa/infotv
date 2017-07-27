@@ -46,7 +46,7 @@ h1 {
 @animstart1: 20%;  // 100% 
 @stop1: -90%;  // -100%
 
-.scrollable {
+.scrollable-next {
 
 
     height: 100%;  
@@ -98,9 +98,10 @@ h1 {
 
 @start2: 20%;  // 100%
 @animstart2: 20%; // 100%
-@stop2: -100%;  // -100%
+@stop2: -90%;  // -100%
+@speed2: 30s;
 
-.scrollable2 {
+.scrollable-changes {
 
 
      height: 100%;  
@@ -110,7 +111,7 @@ h1 {
      p {
          position: absolute;
          width: 100%;
-         height: 100%;
+         height: 50%;
          margin: 0;
          //line-height: 50px;
          //text-align: center;
@@ -122,9 +123,9 @@ h1 {
          -webkit-transform:translateY(@start2);    
          transform:translateY(@start2);
          /* Apply animation to this element */  
-         -moz-animation: scroll-up @speed linear infinite;
-         -webkit-animation: scroll-up @speed linear infinite;
-         animation: scroll-up @speed linear infinite;
+         -moz-animation: scroll-up @speed2 linear infinite;
+         -webkit-animation: scroll-up @speed2 linear infinite;
+         animation: scroll-up @speed2 linear infinite;
     }
     /* Move it (define the animation) */
     @-moz-keyframes scroll-up {

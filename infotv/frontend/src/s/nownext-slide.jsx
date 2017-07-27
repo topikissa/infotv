@@ -113,7 +113,7 @@ function NowNextSlide() {
     return (
         <div className="slide nownext-slide">
         <h1>Seuraavaksi ohjelmassa</h1>
-        <div className="scrollable">
+        <div className="scrollable-next">
             <p>
             <table className="nownext_table">
                 <tbody>{content}</tbody>
