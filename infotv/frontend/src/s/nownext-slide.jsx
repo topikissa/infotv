@@ -99,7 +99,7 @@ function NowNextSlide() {
             let progEntry = 
                 <div className={timeClass}>{renderProgram(prog, startTs, endTs)}</div>;
             content.push(
-                <tr key={prog.title+loc} className="nownext-table-row">
+                <tr key={prog.id+prog.title+loc} className="nownext-table-row">
                     <td className="nownext-table-cell current">{typeEntry}</td>
                     <td className="nownext-table-cell current">{progEntry}</td>
                     <td className="nownext-table-cell loc">{loc}</td>

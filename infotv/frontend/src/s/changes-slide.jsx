@@ -237,7 +237,7 @@ function ChangesSlide() {
         let progEntry = 
             <div className={changeClass}>{renderChanges(prog, startTs, endTs)}</div>;
         content.push(
-            <tr key={prog.title+loc} className="changes-table-row">
+            <tr key={prog.id+prog.title+loc} className="changes-table-row">
                 <td className="changes-table-cell current">{typeEntry}</td>
                 <td className="changes-table-cell current">{progEntry}</td>
                 <td className="changes-table-cell loc">{loc}</td>
