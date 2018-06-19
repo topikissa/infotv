@@ -40,7 +40,7 @@ function getWeekday(timeStamp) {
 function getLocationString(prog) {
         var numLocs = 0;
         var locString = "";
-        _.each(prog.loc, (loc) => {
+        _.each(prog.room_name, (loc) => {
             if (numLocs > 0) {
                 locString = locString + ", ";
             }
@@ -71,16 +71,18 @@ function NowNextSlide() {
         // NOTE: the programme entries in the conbase json api are ordered by time
         if (entryCounter >= entriesShown) return false; // only show first entries
 
+ 	if (prog.is_public!==true) return false; // do not show non-public entries
+
         const loc = getLocationString(prog);  
          if (onlyLoc && loc.indexOf(onlyLoc) === -1) return; // only show entries for current location. (Match given location limiter to the prefix of programme location)
 
-        const startDate = new Date(prog.date+"T"+prog.time);  
-        const endDate = new Date(startDate.getTime()+60*1000*prog.mins); // time in milliseconds  
+        const startDate = new Date(prog.start_time);  
+        const endDate = new Date(startDate.getTime()+60*1000*prog.length); // time in milliseconds  
         const startTs = startDate.getTime()/1000;  // in seconds
         const endTs = endDate.getTime()/1000;  // in seconds
         
         // only show programs which have started less than a grace period ago
-        // or have no yet started
+        // or have not yet started
         // and have not ended yet
         if(prog && startTs+gracePeriod>nowTs && endTs > nowTs) {
             entryCounter++;
@@ -99,7 +101,7 @@ function NowNextSlide() {
             let progEntry = 
                 <div className={timeClass}>{renderProgram(prog, startTs, endTs)}</div>;
             content.push(
-                <tr key={prog.id+prog.title+loc} className="nownext-table-row">
+                <tr key={prog.title+loc+prog.start_time} className="nownext-table-row">
                     <td className="nownext-table-cell current">{typeEntry}</td>
                     <td className="nownext-table-cell current">{progEntry}</td>
                     <td className="nownext-table-cell loc">{loc}</td>

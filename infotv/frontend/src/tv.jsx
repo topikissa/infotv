@@ -132,7 +132,7 @@ export default class TVApp extends React.Component {
                     this.forceUpdate();
                 });
     
-        fetchJSON(`https://conbase.ropecon.fi/programs/export.json`)
+        fetchJSON(`https://kompassi.eu/events/ropecon2018/programme.json`)
                 .then((data) => {
                     DatumManager.setValue("current_schedule", data);
                     this.forceUpdate();
@@ -141,7 +141,7 @@ export default class TVApp extends React.Component {
 
     requestSchedule() {
 
-        fetchJSON(`https://conbase.ropecon.fi/programs/export.json`)
+        fetchJSON(`https://kompassi.eu/events/ropecon2018/programme.json`)
                 .then((data) => {
                     DatumManager.setValue("schedule", data);
                     this.forceUpdate();
