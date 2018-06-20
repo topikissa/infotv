@@ -41,7 +41,7 @@ function getWeekday(timeStamp) {
 function getStartTs(prog) {
 
 
-    const startDate = new Date(prog.date+"T"+prog.time);  // time in milliseconds
+    const startDate = new Date(prog.start_time);  // time in milliseconds
     const startTs = startDate.getTime()/1000;  // in seconds
     return startTs;
 
@@ -50,8 +50,8 @@ function getStartTs(prog) {
 function getEndTs(prog) {
 
 
-    const startDate = new Date(prog.date+"T"+prog.time);  
-    const endDate = new Date(startDate.getTime()+60*1000*prog.mins); // time in milliseconds  
+    const startDate = new Date(prog.start_time);  
+    const endDate = new Date(startDate.getTime()+60*1000*prog.length); // time in milliseconds  
     const endTs = endDate.getTime()/1000;  // in seconds
     return endTs;
 
@@ -62,7 +62,7 @@ function getEndTs(prog) {
 function getLocationString(prog) {
         var numLocs = 0;
         var locString = "";
-        _.each(prog.loc, (loc) => {
+        _.each(prog.room_name, (loc) => {
             if (numLocs > 0) {
                 locString = locString + ", ";
             }
@@ -99,7 +99,7 @@ function ChangesSlide() {
         // NOTE javascript objects are (apparently) impelmented internally 
         // by using hash tables for key mapping
         // so can get good enough hash table performance by just using them
-        origHashtable[prog.id] = prog;
+        origHashtable[prog.id] = prog;  // TODO think of a way to replace prog.id with combination of .title and other available values
         
     });
 
@@ -199,20 +199,6 @@ function ChangesSlide() {
 
        
 
-        // TODO remove
-        // Ropecon2017 specific fixes
-        // Remove entries for Pöytäpelit programme not located in the Halli 5
-        var notIncluded = false;
-        _.each(prog.tags, (tag) => {
-            if (tag.indexOf("Pöytäpelit") !== -1) {
-                if (loc.indexOf("Halli 5") === -1) {
-                    notIncluded=true;
-                    return;
-                }
-            }
-        });
-        if (notIncluded) return;
-
 
         entryCounter++;
 
@@ -237,7 +223,7 @@ function ChangesSlide() {
         let progEntry = 
             <div className={changeClass}>{renderChanges(prog, startTs, endTs)}</div>;
         content.push(
-            <tr key={prog.id+prog.title+loc} className="changes-table-row">
+            <tr key={prog.title+prog.room_name+prog.start_time} className="changes-table-row">
                 <td className="changes-table-cell current">{typeEntry}</td>
                 <td className="changes-table-cell current">{progEntry}</td>
                 <td className="changes-table-cell loc">{loc}</td>
