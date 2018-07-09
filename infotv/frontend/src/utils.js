@@ -21,3 +21,11 @@ export function fetchJSON(url, opts = {}) {
         .then(checkStatus)
         .then((response) => response.json());
 }
+
+// TEMPORARY TEST CODE, TODO fix when working
+export function fetchCorsJSON(url, opts = {}) {
+    const defaultOpts = { mode: 'cors'};
+    return fetch(url, Object.assign({}, defaultOpts, opts))
+        .then(checkStatus)
+        .then((response) => response.json());
+}

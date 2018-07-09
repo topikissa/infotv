@@ -7,7 +7,7 @@ import DatumManager from "./datum";
 import _ from "lodash";
 import stagger from "./stagger";
 import config from "./config";
-import { fetchJSON } from "./utils";
+import { fetchJSON, fetchCorsJSON } from "./utils";
 
 function checkTallness() {
     document.body.classList.toggle("tall", (window.innerWidth < window.innerHeight));
@@ -132,7 +132,7 @@ export default class TVApp extends React.Component {
                     this.forceUpdate();
                 });
     
-        fetchJSON(`https://kompassi.eu/events/ropecon2018/programme.json`)
+        fetchCorsJSON(`https://kompassi.eu/api/v1/events/ropecon2018/programme`)
                 .then((data) => {
                     DatumManager.setValue("current_schedule", data);
                     this.forceUpdate();
@@ -141,7 +141,7 @@ export default class TVApp extends React.Component {
 
     requestSchedule() {
 
-        fetchJSON(`https://kompassi.eu/events/ropecon2018/programme.json`)
+        fetchCorsJSON(`https://kompassi.eu/api/v1/events/ropecon2018/programme`)
                 .then((data) => {
                     DatumManager.setValue("schedule", data);
                     this.forceUpdate();
