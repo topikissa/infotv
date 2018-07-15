@@ -37,19 +37,6 @@ function getWeekday(timeStamp) {
 
 }
 
-function getLocationString(prog) {
-        var numLocs = 0;
-        var locString = "";
-        _.each(prog.room_name, (loc) => {
-            if (numLocs > 0) {
-                locString = locString + ", ";
-            }
-            locString = locString + loc;
-            numLocs = numLocs +1;
-        });
-        return locString;
-}
-
 function NowNextSlide() {
 
 
@@ -73,7 +60,7 @@ function NowNextSlide() {
 
  	if (prog.is_public!==true) return false; // do not show non-public entries
 
-        const loc = getLocationString(prog);  
+        const loc = prog.room_name;  
          if (onlyLoc && loc.indexOf(onlyLoc) === -1) return; // only show entries for current location. (Match given location limiter to the prefix of programme location)
 
         const startDate = new Date(prog.start_time);  
