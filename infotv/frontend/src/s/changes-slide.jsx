@@ -59,25 +59,13 @@ function getEndTs(prog) {
 
 
 
-function getLocationString(prog) {
-        var numLocs = 0;
-        var locString = "";
-        _.each(prog.room_name, (loc) => {
-            if (numLocs > 0) {
-                locString = locString + ", ";
-            }
-            locString = locString + loc;
-            numLocs = numLocs +1;
-        });
-        return locString;
-}
-
 function ChangesSlide() {
 
 
     const changeStr = "CHANGE";
     const removedStr = "DELETED";
     const newStr = "NEW";
+    const hiddenStr = "HIDDEN";
     const entriesShown = 40; // TODO fix hard coded value
     const gracePeriod = 15 * 60; // in seconds
     const onlyLoc = config.loc;
@@ -91,6 +79,8 @@ function ChangesSlide() {
     const nowTs = (+new Date()) / 1000;  // time in seconds
     var origHashtable = {};
     var changeList = [];
+    var possibleChangeAdditions = [];
+    var possibleChangeRemovals = [];
     var newTitles = {};
     var cancelledTitles = {};
 
@@ -101,29 +91,24 @@ function ChangesSlide() {
         // NOTE javascript objects are (apparently) impelmented internally 
         // by using hash tables for key mapping
         // so can get good enough hash table performance by just using them
-        origHashtable[prog.title+loc+prog.start_time] = prog; 
+        origHashtable[prog.title+prog.room_name+prog.start_time] = prog; 
     });
 
     // loop trough the current schedule entries and compare to the original ones
     _.each(currentSchedule, (currentProg) => {
 
         // fetch corresponding entry (origProg) from the original programme 
-        const origProg = origHashtable[prog.title+loc+prog.start_time]; 
+        const origProg = origHashtable[currentProg.title+currentProg.room_name+currentProg.start_time]; 
 
 
 
         // if no entry found then this is a NEW program
         if (!origProg) {
-            // compare times, if time in the past then now need to show 
-            // TODO rethink the above in light of new change logic
-            const currentEndTs = getEndTs(currentProg);  
-            if (currentEndTs > nowTs) {
-                currentProg.reason = newStr;
-                // add the entry to the list of changed 
-                changeList.push(currentProg);
-                // add the title to the list of new titles
-                newTitles(prog.title); 
-            }
+            currentProg.reason = newStr;
+            // add the entry to the list of changed 
+            changeList.push(currentProg);
+            // add the title to the hashtable of new titles
+            newTitles[currentProg.title]; 
             return;
         }
 
@@ -135,47 +120,77 @@ function ChangesSlide() {
     // loop trough the original entries once more and check for cancelled entries
     _.each(origSchedule, (prog) => {
         if (!prog.notDeleted) {
-            const endTs = getEndTs(prog);  
-            if (endTs > nowTs) {  // TODO rethink this comparison in light of the name change detection logic
-                prog.reason = removedStr;            
-                // add the entry to the list of changed 
-                changeList.push(prog);
-                // add the title to the list of new titles
-                cancelledTitles(prog.title); 
-            }
-            return;
+            prog.reason = removedStr;            
+            // add the entry to the list of changed 
+            changeList.push(prog);
+            // add the title to the list of new titles
+            cancelledTitles[prog.title]; 
+            return; // stupid _.each way of using continue
         }
         
     });
 
-    // checking for changes
+    // try to find matches in cancelled entries and new entries to detect entries
+    // which are actually changes and not cancellations or additions
     // TODO add the logic for skipping entries in the past
-    // go through the new entries
+    // first go through all the entries and try to find if there is an entry of the
+    // same title
+    // Note the purpose of this linear iteration is to prune extra entries from the 
+    // next loop which happens in quadratic time
+    _.each(changeList, (prog) => {
 
-        // check if the title of the entry is in the cancelled titles
-            // add the entry to the list of possible change-additions
+        if (prog.reason === newStr) {
+        
+            const cancelledTitleExists = cancelledTitles[prog.title];
+            if (cancelledTitleExists) {
+                // add the entry to the list of possible change-additions
+                possibleChangeAdditions.push(prog);
+            }
+        } 
 
-    // go through the cancelled entries
+        else if (prog.reason === removedStr) {
+        
+            const newTitleExists = newTitles[prog.title];
+            if (newTitleExists) {
+                // add the entry to the list of possible change-removals
+                possibleChangeRemovals.push(prog);
+            }
+        } 
 
-        // check if the title of the entry is in the new titles
-            // add the entry to the list of possible change-removals
+    });
 
-    // go through the list of possible change-additions
+
+    // check the remaining additions and removals for different kinds of matching
+    // if some match is found mark the new entry as change and the old one as hidden (not shown)
+    // and jump straight to the next added entry
+    // TODO check if the objects are apparently not referred as links, need to point directly to changelist
+    // TODO maybe not js array then??
+    // TODO maybe remove them earlier from changelist and then put back here?
+    outerloop:
+    _.each(possibleChangeAdditions, (addedProg) => {
         // for each entry go through the list of possible change-removals
+        _.each(possibleChangeRemovals, (removedProg) => {
             // if both entries have the same time and title (location-change is the primary change detection)
-                //remove them from changelist (how?, new property to progentry?)
-                // and add the new entry to the changelist as change
-                // continue both loops
-
+            if(addedProg.title === removedProg.title && addedProg.start_time === removedProg.start_time) {
+                addedProg.reason = changeStr;
+                removedProg.reason = hiddenStr;
+                return false; // stupid _.each way of using break
+            }
             // if both entries have the same location and title (time-change is the secondary change detection)
-                //remove them from changelist 
-                // and add the new entry to the changelist as change
-                // continue both loops
+            else if(addedProg.title === removedProg.title && addedProg.room_name === removedProg.room_name) {
+                addedProg.reason = changeStr;
+                removedProg.reason = hiddenStr;
+                return false;
+            }
 
             // if both entries have the same title (detect any remaining change)
-                //remove them from changelist 
-                // and add the new entry to the changelist as change
-                // continue both loops
+            else if(addedProg.title === removedProg.title) {
+                addedProg.reason = changeStr;
+                removedProg.reason = hiddenStr;
+                return false;
+            }
+        });
+    });
 
     // sort the changeList in ascending order by the starting time
     changeList.sort(function(a,b) {
@@ -190,17 +205,16 @@ function ChangesSlide() {
     _.each(changeList, (prog) => {
 
 
-        const loc = getLocationString(prog);
+        const loc = prog.room_name;
         if (onlyLoc && loc.indexOf(onlyLoc) === -1) return; // only show entries for current location. (Match given location limiter to the prefix of programme location)
 
         if (entryCounter >= entriesShown) return false; // only show first entries
-
        
 
-
-        entryCounter++;
-
         const startTs = getStartTs(prog);
+
+	if (startTs + gracePeriod < nowTs) return; // do not show entries in the past, TODO this simple solution does not work correctly if there are entries which are moved to earlier timeslots
+
         const endTs = getEndTs(prog);
 
         let changeType = "";
@@ -215,7 +229,12 @@ function ChangesSlide() {
         } else if (prog.reason === removedStr){
             changeType = "Peruttu";
             changeClass = "cancellation";
+        } else {
+            return;
         }
+
+        entryCounter++;
+
         let typeEntry = 
             <div className={changeClass}><span className="ctitle">{changeType}</span></div>;
         let progEntry = 
