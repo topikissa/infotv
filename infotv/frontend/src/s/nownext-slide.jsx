@@ -55,7 +55,7 @@ function NowNextSlide() {
 
     var entryCounter = 0;
     _.each(schedule, (prog) => {
-        // NOTE: the programme entries in the conbase json api are ordered by time
+        // NOTE: the programme entries in the Kompassi json api are ordered by starting time
         if (entryCounter >= entriesShown) return false; // only show first entries
 
  	if (prog.is_public!==true) return false; // do not show non-public entries

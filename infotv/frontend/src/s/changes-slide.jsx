@@ -108,7 +108,7 @@ function ChangesSlide() {
             // add the entry to the list of changed 
             changeList.push(currentProg);
             // add the title to the hashtable of new titles
-            newTitles[currentProg.title]; 
+            newTitles[currentProg.title] = currentProg.title; 
             return;
         }
 
@@ -124,15 +124,14 @@ function ChangesSlide() {
             // add the entry to the list of changed 
             changeList.push(prog);
             // add the title to the list of new titles
-            cancelledTitles[prog.title]; 
-            return; // stupid _.each way of using continue
+            cancelledTitles[prog.title] = prog.title; 
+            return; // obscure _.each way of using continue
         }
         
     });
 
     // try to find matches in cancelled entries and new entries to detect entries
     // which are actually changes and not cancellations or additions
-    // TODO add the logic for skipping entries in the past
     // first go through all the entries and try to find if there is an entry of the
     // same title
     // Note the purpose of this linear iteration is to prune extra entries from the 
@@ -145,7 +144,7 @@ function ChangesSlide() {
             if (cancelledTitleExists) {
                 // add the entry to the list of possible change-additions
                 possibleChangeAdditions.push(prog);
-            }
+            } 
         } 
 
         else if (prog.reason === removedStr) {
@@ -154,7 +153,7 @@ function ChangesSlide() {
             if (newTitleExists) {
                 // add the entry to the list of possible change-removals
                 possibleChangeRemovals.push(prog);
-            }
+            } 
         } 
 
     });
@@ -163,29 +162,42 @@ function ChangesSlide() {
     // check the remaining additions and removals for different kinds of matching
     // if some match is found mark the new entry as change and the old one as hidden (not shown)
     // and jump straight to the next added entry
-    // TODO check if the objects are apparently not referred as links, need to point directly to changelist
-    // TODO maybe not js array then??
-    // TODO maybe remove them earlier from changelist and then put back here?
-    outerloop:
     _.each(possibleChangeAdditions, (addedProg) => {
         // for each entry go through the list of possible change-removals
         _.each(possibleChangeRemovals, (removedProg) => {
             // if both entries have the same time and title (location-change is the primary change detection)
             if(addedProg.title === removedProg.title && addedProg.start_time === removedProg.start_time) {
-                addedProg.reason = changeStr;
+                const startTs = getStartTs(addedProg);
+	        if (startTs + gracePeriod < nowTs) { 
+                    addedProg.reason = hiddenStr; // only show future and current programs
+                } else { 
+                    addedProg.reason = changeStr;
+                } 
                 removedProg.reason = hiddenStr;
-                return false; // stupid _.each way of using break
+                return false; // obscure _.each way of using break
             }
             // if both entries have the same location and title (time-change is the secondary change detection)
             else if(addedProg.title === removedProg.title && addedProg.room_name === removedProg.room_name) {
-                addedProg.reason = changeStr;
+                const addedStartTs = getStartTs(addedProg);
+                const removedStartTs = getStartTs(removedProg);
+	        if (addedStartTs + gracePeriod < nowTs && removedStartTs + gracePeriod < nowTs) { 
+                    addedProg.reason = hiddenStr; // only show future and current programs
+                } else {
+                     addedProg.reason = changeStr;
+                }
                 removedProg.reason = hiddenStr;
                 return false;
             }
 
             // if both entries have the same title (detect any remaining change)
             else if(addedProg.title === removedProg.title) {
-                addedProg.reason = changeStr;
+                const addedStartTs = getStartTs(addedProg);
+                const removedStartTs = getStartTs(removedProg);
+	        if (addedStartTs + gracePeriod < nowTs && removedStartTs + gracePeriod < nowTs) { 
+                    addedProg.reason = hiddenStr; // only show future and current programs
+                } else {
+                     addedProg.reason = changeStr;
+                }
                 removedProg.reason = hiddenStr;
                 return false;
             }
@@ -213,8 +225,9 @@ function ChangesSlide() {
 
         const startTs = getStartTs(prog);
 
-	if (startTs + gracePeriod < nowTs) return; // do not show entries in the past, TODO this simple solution does not work correctly if there are entries which are moved to earlier timeslots
-
+	if (startTs + gracePeriod < nowTs && (prog.reason === newStr || prog.reason === removedStr)) { 
+            return; // only show current and future programs, note that logic for deciding if changed programs are show is elsewhere
+        }
         const endTs = getEndTs(prog);
 
         let changeType = "";
