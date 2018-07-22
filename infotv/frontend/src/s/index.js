@@ -5,9 +5,12 @@ import TextSlide from "./text-slide.jsx";
 import ImageSlide from "./image-slide.jsx";
 import MultiImageSlide from "./multi-image-slide.jsx";
 import NowNextSlide from "./nownext-slide.jsx";
+//import resultsserviceSlide from "./resultsservice-slide.jsx";
 import ChangesSlide from "./changes-slide.jsx";
 import SocialSlide from "./social-slide.jsx";
 import AnimeSlide from "./anime-slide.jsx";
+
+
 
 const slideModules = {
     text: TextSlide,
@@ -17,6 +20,7 @@ const slideModules = {
     changes: ChangesSlide,
     social: SocialSlide,
     //anime: AnimeSlide,
+    //resultsservice: resultsserviceSlide,
 };
 
 const viewComponents = {};
