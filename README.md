@@ -73,7 +73,7 @@ instal apache etc.:
 
 ```
 sudo apt-get update
-sudo apt-get install python3-pip apache2 libapache2-mod-wsgi-py3 # or libapache2-mod-wsgi-py 
+sudo apt-get install python3-pip apache2 libapache2-mod-wsgi-py3 # or libapache2-mod-wsgi 
 ```
 
 edit the default virtual host file:
