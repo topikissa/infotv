@@ -167,8 +167,8 @@ function ChangesSlide() {
         _.each(possibleChangeRemovals, (removedProg) => {
             // if both entries have the same time and title (location-change is the primary change detection)
             if(addedProg.title === removedProg.title && addedProg.start_time === removedProg.start_time) {
-                const startTs = getStartTs(addedProg);
-	        if (startTs + gracePeriod < nowTs) { 
+                const endTs = getEndTs(addedProg);
+	        if (endTs < nowTs) { 
                     addedProg.reason = hiddenStr; // only show future and current programs
                 } else { 
                     addedProg.reason = changeStr;
@@ -178,9 +178,9 @@ function ChangesSlide() {
             }
             // if both entries have the same location and title (time-change is the secondary change detection)
             else if(addedProg.title === removedProg.title && addedProg.room_name === removedProg.room_name) {
-                const addedStartTs = getStartTs(addedProg);
-                const removedStartTs = getStartTs(removedProg);
-	        if (addedStartTs + gracePeriod < nowTs && removedStartTs + gracePeriod < nowTs) { 
+                const addedEndTs = getEndTs(addedProg);
+                const removedEndTs = getEndTs(removedProg);
+	        if (removedEndTs < nowTs && removedEndTs < nowTs) { 
                     addedProg.reason = hiddenStr; // only show future and current programs
                 } else {
                      addedProg.reason = changeStr;
@@ -191,9 +191,9 @@ function ChangesSlide() {
 
             // if both entries have the same title (detect any remaining change)
             else if(addedProg.title === removedProg.title) {
-                const addedStartTs = getStartTs(addedProg);
-                const removedStartTs = getStartTs(removedProg);
-	        if (addedStartTs + gracePeriod < nowTs && removedStartTs + gracePeriod < nowTs) { 
+                const addedEndTs = getEndTs(addedProg);
+                const removedEndTs = getEndTs(removedProg);
+	        if (addedEndTs < nowTs && removedEndTs < nowTs) { 
                     addedProg.reason = hiddenStr; // only show future and current programs
                 } else {
                      addedProg.reason = changeStr;
@@ -224,11 +224,12 @@ function ChangesSlide() {
        
 
         const startTs = getStartTs(prog);
+        const endTs = getEndTs(prog);
 
-	if (startTs + gracePeriod < nowTs && (prog.reason === newStr || prog.reason === removedStr)) { 
+	if (endTs < nowTs && (prog.reason === newStr || prog.reason === removedStr)) { 
             return; // only show current and future programs, note that logic for deciding if changed programs are show is elsewhere
         }
-        const endTs = getEndTs(prog);
+
 
         let changeType = "";
         let changeClass = "";
