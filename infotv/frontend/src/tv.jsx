@@ -152,18 +152,14 @@ export default class TVApp extends React.Component {
                 });
     }
 
-    requestResults() { //TODO remove temporary test code
+    requestResults() { 
 
-        fetchJSON("/static/infotv/results_example.json")
+
+        fetchCorsJSON(`https://contulos.kivimaa.fi/tournaments.json?year=2018`)
                 .then((data) => {
-                    DatumManager.setValue("results", data);    
+                    DatumManager.setValue("results", data);
                     this.forceUpdate();
                 });
-        //fetchCorsJSON(`https://contulos.kivimaa.fi/tournaments.json?year=2018`)
-        //        .then((data) => {
-        //            DatumManager.setValue("results", data);
-        //            this.forceUpdate();
-        //        });
     }
     requestSocial() {
         fetchJSON("/api/social/")
