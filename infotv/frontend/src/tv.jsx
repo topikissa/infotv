@@ -19,6 +19,7 @@ export default class TVApp extends React.Component {
         this.madokaTick = this.madokaTick.bind(this);
         this.requestDeck = this.requestDeck.bind(this);
         this.requestSchedule = this.requestSchedule.bind(this);
+        this.requestResults = this.requestResults.bind(this);
         this.requestChanges = this.requestChanges.bind(this);
         this.requestSocial = this.requestSocial.bind(this);
         this.slideSwitchTick = this.slideSwitchTick.bind(this);
@@ -37,6 +38,7 @@ export default class TVApp extends React.Component {
         const self = this;
         this.deckUpdater = stagger({ interval: [50 * 1000, 70 * 1000], callback: self.requestDeck });
         this.scheduleUpdater = stagger({ interval: [60 * 4 * 1000, 60 * 6 * 1000], callback: self.requestSchedule });
+        this.resultsUpdater = stagger({ interval: [60 * 4 * 1000, 60 * 6 * 1000], callback: self.requestResults });
         this.changesUpdater = stagger({ interval: [60 * 4 * 1000, 60 * 6 * 1000], callback: self.requestChanges });
         this.socialUpdater = stagger({ interval: [50 * 1000, 90 * 1000], callback: self.requestSocial });
         this.slideSwitchTimer = setInterval(self.slideSwitchTick, 3500);
@@ -44,6 +46,7 @@ export default class TVApp extends React.Component {
         this.requestDeck();
         this.requestSchedule();
         this.requestChanges();
+	this.requestResults();
         this.requestSocial();
         if (config.edit) this.enableEditing();
         else document.body.classList.add("show");
@@ -56,7 +59,8 @@ export default class TVApp extends React.Component {
         this.scheduleUpdater.stop();
         this.changesUpdater.stop();
         this.socialUpdater.stop();
-        clearInterval(this.madokaTimer);
+        this.resultsUpdater.stop();
+	clearInterval(this.madokaTimer);
         clearInterval(this.slideSwitchTimer);
     }
 
@@ -148,6 +152,19 @@ export default class TVApp extends React.Component {
                 });
     }
 
+    requestResults() { //TODO remove temporary test code
+
+        fetchJSON("/static/infotv/results_example.json")
+                .then((data) => {
+                    DatumManager.setValue("results", data);    
+                    this.forceUpdate();
+                });
+        //fetchCorsJSON(`https://contulos.kivimaa.fi/tournaments.json?year=2018`)
+        //        .then((data) => {
+        //            DatumManager.setValue("results", data);
+        //            this.forceUpdate();
+        //        });
+    }
     requestSocial() {
         fetchJSON("/api/social/")
             .then((data) => {

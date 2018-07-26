@@ -96,6 +96,56 @@ h1 {
 
 }
 
+.scrollable-results {
+
+
+    height: 100%;  
+    overflow: hidden;
+    position: relative;
+
+    p {
+         position: absolute;
+         width: 100%;
+         height: 200%;
+         margin: 0;
+         //line-height: 50px;
+         //text-align: center;
+         /* Starting position */
+         //-moz-transform:translateY(100%);
+         //-webkit-transform:translateY(100%);    
+         //transform:translateY(100%);
+         -moz-transform:translateY(@start1);
+         -webkit-transform:translateY(@start1);    
+         transform:translateY(@start1);
+         /* Apply animation to this element */  
+         -moz-animation: scroll-up @speed linear infinite;
+         -webkit-animation: scroll-up @speed linear infinite;
+         animation: scroll-up @speed linear infinite;
+    }
+    /* Move it (define the animation) */
+    @-moz-keyframes scroll-up {
+         0%   { -moz-transform: translateY(@animstart1); }
+         100% { -moz-transform: translateY(@stop1); }
+    }
+    @-webkit-keyframes scroll-up {
+     0%   { -webkit-transform: translateY(@animstart1); }
+     100% { -webkit-transform: translateY(@stop1); }
+    }
+    @keyframes scroll-up {
+     0%   { 
+     -moz-transform: translateY(@animstart1); /* Browser bug fix */
+     -webkit-transform: translateY(@animstart1); /* Browser bug fix */
+     transform: translateY(@animstart1);       
+     }
+     100% { 
+     -moz-transform: translateY(@stop1); /* Browser bug fix */
+     -webkit-transform: translateY(@stop1); /* Browser bug fix */
+     transform: translateY(@stop1); 
+     }
+    }
+
+}
+
 @start2: 20%;  // 100%
 @animstart2: 20%; // 100%
 @stop2: -90%;  // -100%
@@ -181,6 +231,41 @@ h1 {
     }
 
     .ntitle {
+        opacity: 0.75;
+        font-size: 80%
+    }
+
+}
+
+.resultservice-slide {
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        font-size: 2vmax;
+        padding: 0.2em;
+    }
+
+    tr:nth-child(2n) {
+        background: rgba(0,0,0,0.5);
+    }
+
+    tr:nth-child(2n+1) {
+        background: rgba(0,0,0,0.3);
+    }
+
+    .place {
+        font-weight: bold;
+        /*padding-right: 0.25em*/
+    }
+
+    .soon .times {
+        color: orange;
+    }
+
+    .gtitle {
         opacity: 0.75;
         font-size: 80%
     }
