@@ -49,6 +49,8 @@ Other queryparameter options:
 * `?slow=1` -- disable transitions (for poor ol' Raspberry Pis)
 * `?loc=location` -- show only the `location` location on `nownext` slides (useful for room-specific schedule displays)
 
+Note that the text slide editor uses Markdown syntax (https://en.wikipedia.org/wiki/Markdown).
+
 
 Setting up a production instance
 ------------------------------
