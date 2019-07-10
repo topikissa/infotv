@@ -136,7 +136,7 @@ export default class TVApp extends React.Component {
                     this.forceUpdate();
                 });
     
-        fetchCorsJSON(`https://kompassi.eu/api/v1/events/ropecon2018/programme`)
+        fetchCorsJSON(`https://kompassi.eu/api/v1/events/ropecon2019/programme`)
                 .then((data) => {
                     DatumManager.setValue("current_schedule", data);
                     this.forceUpdate();
@@ -145,7 +145,7 @@ export default class TVApp extends React.Component {
 
     requestSchedule() {
 
-        fetchCorsJSON(`https://kompassi.eu/api/v1/events/ropecon2018/programme`)
+        fetchCorsJSON(`https://kompassi.eu/api/v1/events/ropecon2019/programme`)
                 .then((data) => {
                     DatumManager.setValue("schedule", data);
                     this.forceUpdate();
@@ -155,7 +155,7 @@ export default class TVApp extends React.Component {
     requestResults() { 
 
 
-        fetchCorsJSON(`https://contulos.kivimaa.fi/tournaments.json?year=2018`)
+        fetchCorsJSON(`https://contulos.kivimaa.fi/tournaments.json?year=2019`)
                 .then((data) => {
                     DatumManager.setValue("results", data);
                     this.forceUpdate();
