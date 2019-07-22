@@ -54,10 +54,11 @@ Note that the text slide editor uses Markdown syntax (https://en.wikipedia.org/w
 
 Setting up a production instance
 ------------------------------
-(modified from: https://www.digitalocean.com/community/tutorials/how-to-serve-django-applications-with-apache-and-mod_wsgi-on-ubuntu-14-04)
+This will set up a dockerized instance of the django application listening on the port 65288. Setting up virtual hosts, port mapping, tls termination, etc. is outside the scope of these instructions
 
+(Note that the Kompassi programme api CORS settings require the application to be run on standard ports - 80 or 443.)
 
-* First set up a development instance and test that it is working
+* update manage.py file to point to infotv_prod settings
 
 * Then generate a new random SECRET_KEY value and replace the one in
 
@@ -66,69 +67,34 @@ Setting up a production instance
 
 ```
 
-run a release build:
+build the docker image:
 ```
-INFOTV_STYLE=ropecon npm run release	
-```
-
-instal apache etc.:
-
-```
-sudo apt-get update
-sudo apt-get install python3-pip apache2 libapache2-mod-wsgi-py3 # or libapache2-mod-wsgi 
+cd infotvpath
+sudo docker-compose build
 ```
 
-edit the default virtual host file:
+start the container for the first time and perform manual configuration (needed only once)
 
 ```
-sudo nano /etc/apache2/sites-available/000-default.conf
+sudo docker-compose up -d
+sudo docket container ls  # note the container ID
+sudo docker exec -it [container ID] bash
 ```
 
-Add the following settings:
-(Replace the infotvpath with a directory path you have installed the development instance in!)
+run the following commands inside the container
+
 
 ```
-<VirtualHost *:80>
-    . . .
-
-    Alias /static /infotvpath/infotv/infotv/static
-    <Directory /infotvpath/infotv/static>
-        Require all granted
-    </Directory>
-
-    <Directory /infotvpath/infotv/infotv_prod>
-        <Files wsgi.py>
-            Require all granted
-        </Files>
-    </Directory>
-
-    WSGIDaemonProcess infotv python-path=/infotvpath/infotv:/infotvpath/venv-infotv/lib/python2.7/site-packages
-    WSGIProcessGroup infotv
-    WSGIScriptAlias / /infotvpath/infotv/infotv_prod/wsgi.py
-
-</VirtualHost>
+python manage.py migrate --no-input
+python manage.py createsuperuser --username staff --email staff@localhost  # create user "staff", needed for editing slides
 
 ```
 
+Restart the container
+
 ```
-update manage.py file to point to infotv_prod settings
-```
-
-
-consider changing sqlite3 database to something else like postgresql
-( https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04 )
-
-
-
-Fix permissions for apache:
-```
-chmod 664 ~/infotvpath/infotv/db.sqlite3
-sudo chown :www-data ~/infotvpath/infotv/db.sqlite3
-sudo chown :www-data ~/infotvpath/infotv
+sudo docker-compose down
+sudo docker-compose up -d
 ```
 
-Restart apache:
-```
-sudo service apache2 restart
-```
 
